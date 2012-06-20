@@ -1,0 +1,17 @@
+﻿@model Demos.Orm.ViewModel.BlogListViewModel
+
+
+@{
+	ViewBag.Title = "Index";
+}
+
+<h2>Demos.Orm.WebSite</h2>
+
+<fieldset>
+	<legend>Blogs</legend>
+	@foreach (var blog in Model.Blogs) 
+	{
+		<h1>@blog.Name</h1>
+		@Html.ActionLink("View", "Index", "Blog", new {id = blog.Id}, null)
+	}
+</fieldset>

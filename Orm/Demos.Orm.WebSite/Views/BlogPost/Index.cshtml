@@ -1,0 +1,22 @@
+﻿@model Demos.Orm.ViewModel.BlogPostViewModel
+
+@{
+	ViewBag.Title = "Index";
+}
+
+<h2>@Model.BlogPost.BlogSubject</h2>
+<p>@Model.BlogPost.BlogContent</p>
+
+<h3>Comments</h3>
+@{
+	bool hasComments = Model.BlogPost.Comments != null && Model.BlogPost.Comments.Count > 0;
+	if ( hasComments ) {
+		foreach (var comment in Model.BlogPost.Comments) {
+		@:<div>
+			@comment.CommentContent <br />
+			@:by @comment.Username : @comment.CreateDate
+		@:</div>
+		}
+	}
+}
+@Html.ActionLink("Home", "Index", "Home")

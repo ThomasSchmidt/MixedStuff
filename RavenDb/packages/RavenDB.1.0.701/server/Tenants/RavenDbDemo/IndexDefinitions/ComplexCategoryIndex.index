@@ -1,0 +1,41 @@
+{
+  "Name": "ComplexCategoryIndex",
+  "Map": "docs.ComplexCategories\r\n\t.Select(cat => new {Id = cat.__document_id, Field1 = cat.Field1, Field2 = cat.Field2, Field3 = cat.Field3, Field4 = cat.Field4, Field5 = cat.Field5, Field6 = cat.Field6, Field7 = cat.Field7, Field8 = cat.Field8, Field9 = cat.Field9, Field10 = cat.Field10, Field11 = cat.Field11, Field12 = cat.Field12, Field13 = cat.Field13, Field14 = cat.Field14, Field15 = cat.Field15, Field16 = cat.Field16, Field17 = cat.Field17, Field18 = cat.Field18, Field19 = cat.Field19, Field20 = cat.Field20, Field21 = cat.Field21})",
+  "Maps": [
+    "docs.ComplexCategories\r\n\t.Select(cat => new {Id = cat.__document_id, Field1 = cat.Field1, Field2 = cat.Field2, Field3 = cat.Field3, Field4 = cat.Field4, Field5 = cat.Field5, Field6 = cat.Field6, Field7 = cat.Field7, Field8 = cat.Field8, Field9 = cat.Field9, Field10 = cat.Field10, Field11 = cat.Field11, Field12 = cat.Field12, Field13 = cat.Field13, Field14 = cat.Field14, Field15 = cat.Field15, Field16 = cat.Field16, Field17 = cat.Field17, Field18 = cat.Field18, Field19 = cat.Field19, Field20 = cat.Field20, Field21 = cat.Field21})"
+  ],
+  "Reduce": null,
+  "TransformResults": null,
+  "IsMapReduce": false,
+  "IsCompiled": false,
+  "IsTemp": false,
+  "Stores": {},
+  "Indexes": {
+    "Id": "NotAnalyzed",
+    "Field1": "Analyzed",
+    "Field2": "Analyzed",
+    "Field3": "Analyzed",
+    "Field4": "Analyzed",
+    "Field5": "Analyzed",
+    "Field6": "Analyzed",
+    "Field7": "Analyzed",
+    "Field8": "Analyzed",
+    "Field9": "Analyzed",
+    "Field10": "Analyzed",
+    "Field11": "Analyzed",
+    "Field12": "Analyzed",
+    "Field13": "Analyzed",
+    "Field14": "Analyzed",
+    "Field15": "Analyzed",
+    "Field16": "Analyzed",
+    "Field17": "Analyzed",
+    "Field18": "Analyzed",
+    "Field19": "Analyzed",
+    "Field20": "Analyzed",
+    "Field21": "Analyzed"
+  },
+  "SortOptions": {},
+  "Analyzers": {},
+  "Fields": [],
+  "Type": "Map"
+}

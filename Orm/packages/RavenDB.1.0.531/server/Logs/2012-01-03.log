@@ -1,0 +1,729 @@
+time;logger;level;message;exception
+2012-01-03 12:36:49.6200;Raven.Database.Impl.DocumentCacher;Info;"MemoryCache Settings:
+  PhysicalMemoryLimit = 99
+  CacheMemoryLimit    = 3152019456
+  PollingInterval     = 00:02:00";
+2012-01-03 12:36:49.6620;Raven.Storage.Esent.TransactionalStorage;Info;"Esent Settings:
+  MaxVerPages      = 32768
+  CacheSizeMax     = 262144
+  DatabasePageSize = 4096";
+2012-01-03 12:36:53.7534;Raven.Database.DocumentDatabase;Debug;Delete a document with key: Raven/Backup/Status and etag ;
+2012-01-03 12:36:53.7734;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Backup/Status' was not found, and considered deleted;
+2012-01-03 12:39:01.4502;Raven.Database.Indexing.WorkContext;Debug;Stopping background workers;
+time;logger;level;message;exception
+2012-01-03 12:42:59.3300;Raven.Database.Impl.DocumentCacher;Info;"MemoryCache Settings:
+  PhysicalMemoryLimit = 99
+  CacheMemoryLimit    = 3152019456
+  PollingInterval     = 00:02:00";
+2012-01-03 12:42:59.3900;Raven.Storage.Esent.TransactionalStorage;Info;"Esent Settings:
+  MaxVerPages      = 32768
+  CacheSizeMax     = 262144
+  DatabasePageSize = 4096";
+2012-01-03 12:43:00.9011;Raven.Database.DocumentDatabase;Debug;Delete a document with key: Raven/Backup/Status and etag ;
+2012-01-03 12:43:00.9121;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Backup/Status' was not found, and considered deleted;
+2012-01-03 12:43:06.0846;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:43:06.1226;Raven.Database.Server.HttpServer;Debug;Request #   1: GET     -   159 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:43:06.8237;Raven.Database.Storage.IndexDefinitionStorage;Info;"New index Temp%2fBlogs%2fByCreateDateSortByCreateDate:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using Raven.Database.Indexing;
+public class Index_Temp_2fBlogs_2fByCreateDateSortByCreateDate : AbstractViewGenerator
+{
+	public Index_Temp_2fBlogs_2fByCreateDateSortByCreateDate()
+	{
+		this.ViewText = @""from doc in docs.Blogs
+select new { CreateDate = doc.CreateDate }
+"";
+		this.ForEntityNames.Add(""Blogs"");
+		this.AddMapDefinition(docs => from doc in docs
+			where doc[""@metadata""][""Raven-Entity-Name""] == ""Blogs""
+			select new { CreateDate = doc.CreateDate, __document_id = doc.__document_id });
+		this.AddField(""CreateDate"");
+		this.AddField(""__document_id"");
+		this.AddQueryParameterForMap(""CreateDate"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""CreateDate"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+
+Compiled to:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using Raven.Database.Indexing;
+public class Index_Temp_2fBlogs_2fByCreateDateSortByCreateDate : AbstractViewGenerator
+{
+	public Index_Temp_2fBlogs_2fByCreateDateSortByCreateDate()
+	{
+		this.ViewText = @""from doc in docs.Blogs
+select new { CreateDate = doc.CreateDate }
+"";
+		this.ForEntityNames.Add(""Blogs"");
+		this.AddMapDefinition(docs => from doc in docs
+			where doc[""@metadata""][""Raven-Entity-Name""] == ""Blogs""
+			select new { CreateDate = doc.CreateDate, __document_id = doc.__document_id });
+		this.AddField(""CreateDate"");
+		this.AddField(""__document_id"");
+		this.AddQueryParameterForMap(""CreateDate"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""CreateDate"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+";
+2012-01-03 12:43:07.1437;Raven.Database.Indexing.IndexStorage;Info;Creating index Temp/Blogs/ByCreateDateSortByCreateDate with encoded name Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 12:43:07.4468;Raven.Database.Indexing.Index.Indexing;Debug;Creating index for Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 12:43:07.5488;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 12:43:07.7538;Raven.Database.Server.HttpServer;Debug;Request #   2: GET     - 1.676 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 12:43:48.2658;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Hilo/blogposts' was not found;
+2012-01-03 12:43:48.2658;Raven.Database.Server.HttpServer;Debug;Request #   3: GET     -    39 ms - <default>  - 404 - /docs/Raven/Hilo/blogposts;
+2012-01-03 12:43:48.2658;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:43:48.2658;Raven.Database.Server.HttpServer;Debug;Request #   4: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:43:48.8029;Raven.Database.DocumentDatabase;Debug;Putting a document with key: Raven/Hilo/blogposts and etag 00000000-0000-0000-0000-000000000000;
+2012-01-03 12:43:48.8519;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Inserted a new document with key 'Raven/Hilo/blogposts', update: False, ;
+2012-01-03 12:43:48.8689;Raven.Database.Server.HttpServer;Debug;Request #   5: PUT     -   157 ms - <default>  - 201 - /docs/Raven/Hilo/blogposts;
+2012-01-03 12:43:48.9139;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Hilo/comments' was not found;
+2012-01-03 12:43:48.9139;Raven.Database.Server.HttpServer;Debug;Request #   6: GET     -     0 ms - <default>  - 404 - /docs/Raven/Hilo/comments;
+2012-01-03 12:43:49.0179;Raven.Database.DocumentDatabase;Debug;Putting a document with key: Raven/Hilo/comments and etag 00000000-0000-0000-0000-000000000000;
+2012-01-03 12:43:49.0349;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Inserted a new document with key 'Raven/Hilo/comments', update: False, ;
+2012-01-03 12:43:49.0879;Raven.Database.Server.HttpServer;Debug;Request #   7: PUT     -    70 ms - <default>  - 201 - /docs/Raven/Hilo/comments;
+2012-01-03 12:43:49.1179;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Hilo/blogs' was not found;
+2012-01-03 12:43:49.1179;Raven.Database.Server.HttpServer;Debug;Request #   8: GET     -    24 ms - <default>  - 404 - /docs/Raven/Hilo/blogs;
+2012-01-03 12:43:49.1179;Raven.Database.Indexing.AbstractIndexingExecuter;Debug;Indexing 1 documents for index: Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 12:43:49.2199;Raven.Database.DocumentDatabase;Debug;Putting a document with key: Raven/Hilo/blogs and etag 00000000-0000-0000-0000-000000000000;
+2012-01-03 12:43:49.2199;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Inserted a new document with key 'Raven/Hilo/blogs', update: False, ;
+2012-01-03 12:43:49.2199;Raven.Database.Server.HttpServer;Debug;Request #   9: PUT     -     3 ms - <default>  - 201 - /docs/Raven/Hilo/blogs;
+2012-01-03 12:43:49.2980;Raven.Database.Indexing.Index.Indexing;Debug;Indexed 0 documents for Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 12:43:49.3630;Raven.Database.DocumentDatabase;Debug;Executing batched commands in a single transaction;
+2012-01-03 12:43:49.3660;Raven.Database.DocumentDatabase;Debug;Putting a document with key: blogs/1 and etag ;
+2012-01-03 12:43:49.3860;Raven.Database.Indexing.AbstractIndexingExecuter;Debug;Indexing 2 documents for index: Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 12:43:49.3860;Raven.Database.Indexing.Index.Indexing;Debug;Indexed 0 documents for Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 12:43:49.4250;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Inserted a new document with key 'blogs/1', update: False, ;
+2012-01-03 12:43:49.4280;Raven.Database.DocumentDatabase;Debug;Successfully executed 1 commands;
+2012-01-03 12:43:49.4280;Raven.Database.Server.HttpServer;Debug;Request #  10: POST    -   128 ms - <default>  - 200 - /bulk_docs;
+2012-01-03 12:43:49.4280;Raven.Database.Server.HttpServer;Debug;"	PUT blogs/1
+";
+2012-01-03 12:43:49.4600;Raven.Database.Indexing.AbstractIndexingExecuter;Debug;Indexing 1 documents for index: Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 12:43:50.0400;Raven.Database.Indexing.Index.Indexing;Debug;Index 'Temp/Blogs/ByCreateDateSortByCreateDate' resulted in: Document<stored/uncompressed,indexed,tokenized,omitNorms<__document_id:blogs/1> indexed,omitNorms<CreateDate:00010101000000000>>;
+2012-01-03 12:43:50.3991;Raven.Database.Indexing.Index.Indexing;Debug;Indexed 1 documents for Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 12:44:05.2175;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:05.2175;Raven.Database.Server.HttpServer;Debug;Request #  11: GET     -    42 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:44:05.2475;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 12:44:05.2936;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:05.3716;Raven.Database.Server.HttpServer;Debug;Request #  12: GET     -   148 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 12:44:07.7178;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:07.7178;Raven.Database.Server.HttpServer;Debug;Request #  13: GET     -    17 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:44:07.7438;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 12:44:07.8678;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:07.8988;Raven.Database.Server.HttpServer;Debug;Request #  14: GET     -   177 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 12:44:09.9010;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:09.9010;Raven.Database.Server.HttpServer;Debug;Request #  15: GET     -    10 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:44:10.0880;Raven.Database.Storage.IndexDefinitionStorage;Info;"New index Temp%2fBlogs%2fByBlogPosts_Id:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using Raven.Database.Indexing;
+public class Index_Temp_2fBlogs_2fByBlogPosts_Id : AbstractViewGenerator
+{
+	public Index_Temp_2fBlogs_2fByBlogPosts_Id()
+	{
+		this.ViewText = @""from doc in docs.Blogs
+from docBlogPostsItem in ((IEnumerable<dynamic>)doc.BlogPosts).DefaultIfEmpty()
+select new { BlogPosts_Id = docBlogPostsItem.Id }
+"";
+		this.ForEntityNames.Add(""Blogs"");
+		this.AddMapDefinition(docs => from doc in docs
+			where doc[""@metadata""][""Raven-Entity-Name""] == ""Blogs""
+			from docBlogPostsItem in ((IEnumerable<dynamic>)doc.BlogPosts).DefaultIfEmpty()
+			select new { BlogPosts_Id = docBlogPostsItem.Id, __document_id = doc.__document_id });
+		this.AddField(""BlogPosts_Id"");
+		this.AddField(""__document_id"");
+		this.AddQueryParameterForMap(""Id"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""Id"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+
+Compiled to:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using Raven.Database.Indexing;
+public class Index_Temp_2fBlogs_2fByBlogPosts_Id : AbstractViewGenerator
+{
+	public Index_Temp_2fBlogs_2fByBlogPosts_Id()
+	{
+		this.ViewText = @""from doc in docs.Blogs
+from docBlogPostsItem in ((IEnumerable<dynamic>)doc.BlogPosts).DefaultIfEmpty()
+select new { BlogPosts_Id = docBlogPostsItem.Id }
+"";
+		this.ForEntityNames.Add(""Blogs"");
+		this.AddMapDefinition(docs => from doc in docs
+			where doc[""@metadata""][""Raven-Entity-Name""] == ""Blogs""
+			from docBlogPostsItem in ((IEnumerable<dynamic>)doc.BlogPosts).DefaultIfEmpty()
+			select new { BlogPosts_Id = docBlogPostsItem.Id, __document_id = doc.__document_id });
+		this.AddField(""BlogPosts_Id"");
+		this.AddField(""__document_id"");
+		this.AddQueryParameterForMap(""Id"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""Id"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+";
+2012-01-03 12:44:10.0880;Raven.Database.Indexing.IndexStorage;Info;Creating index Temp/Blogs/ByBlogPosts_Id with encoded name Temp/Blogs/ByBlogPosts_Id;
+2012-01-03 12:44:10.0880;Raven.Database.Indexing.Index.Indexing;Debug;Creating index for Temp/Blogs/ByBlogPosts_Id;
+2012-01-03 12:44:10.1150;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 12:44:10.1650;Raven.Database.Indexing.AbstractIndexingExecuter;Debug;Indexing 4 documents for index: Temp/Blogs/ByBlogPosts_Id;
+2012-01-03 12:44:10.1960;Raven.Database.Indexing.Index.Indexing;Debug;Index 'Temp/Blogs/ByBlogPosts_Id' resulted in: Document<stored/uncompressed,indexed,tokenized,omitNorms<__document_id:blogs/1> indexed,omitNorms<BlogPosts_Id:0> indexed,tokenized,omitNorms,omitTermFreqAndPositions<BlogPosts_Id_Range:0>>;
+2012-01-03 12:44:10.1960;Raven.Database.Indexing.Index.Indexing;Debug;Index 'Temp/Blogs/ByBlogPosts_Id' resulted in: Document<stored/uncompressed,indexed,tokenized,omitNorms<__document_id:blogs/1> indexed,omitNorms<BlogPosts_Id:0> indexed,tokenized,omitNorms,omitTermFreqAndPositions<BlogPosts_Id_Range:0>>;
+2012-01-03 12:44:10.2080;Raven.Database.Indexing.Index.Indexing;Debug;Indexed 2 documents for Temp/Blogs/ByBlogPosts_Id;
+2012-01-03 12:44:10.3061;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 12:44:10.3061;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:10.3061;Raven.Database.Server.HttpServer;Debug;Request #  16: GET     -   407 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 12:44:13.2353;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:13.2353;Raven.Database.Server.HttpServer;Debug;Request #  17: GET     -    21 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:44:13.2353;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 12:44:13.2353;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:13.2353;Raven.Database.Server.HttpServer;Debug;Request #  18: GET     -     2 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 12:44:15.3436;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:15.3436;Raven.Database.Server.HttpServer;Debug;Request #  19: GET     -    17 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:44:15.3436;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 12:44:15.3436;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:15.3436;Raven.Database.Server.HttpServer;Debug;Request #  20: GET     -     4 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 12:44:16.6787;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:16.6787;Raven.Database.Server.HttpServer;Debug;Request #  21: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:44:16.6877;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 12:44:16.6877;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:16.7057;Raven.Database.Server.HttpServer;Debug;Request #  22: GET     -    24 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 12:44:21.3182;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:21.3182;Raven.Database.Server.HttpServer;Debug;Request #  23: GET     -    16 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:44:21.3182;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 12:44:21.3182;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:21.3182;Raven.Database.Server.HttpServer;Debug;Request #  24: GET     -     9 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 12:44:25.2225;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:25.2225;Raven.Database.Server.HttpServer;Debug;Request #  25: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:44:25.2225;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 12:44:25.2225;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:25.2225;Raven.Database.Server.HttpServer;Debug;Request #  26: GET     -     2 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 12:44:26.6767;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 12:44:26.6767;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:26.6767;Raven.Database.Server.HttpServer;Debug;Request #  27: GET     -    24 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 12:44:26.6837;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:26.6837;Raven.Database.Server.HttpServer;Debug;Request #  28: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:44:28.0888;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 12:44:28.0888;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:44:28.0888;Raven.Database.Server.HttpServer;Debug;Request #  29: GET     -    75 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 12:44:28.1148;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:44:28.1148;Raven.Database.Server.HttpServer;Debug;Request #  30: GET     -     1 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:45:17.4428;Raven.Database.Storage.IndexDefinitionStorage;Info;"New index Raven%2fDocumentsByEntityName:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using Raven.Database.Indexing;
+public class Index_Raven_2fDocumentsByEntityName : AbstractViewGenerator
+{
+	public Index_Raven_2fDocumentsByEntityName()
+	{
+		this.ViewText = @""from doc in docs 
+let Tag = doc[""""@metadata""""][""""Raven-Entity-Name""""]
+where  Tag != null 
+select new { Tag, LastModified = (DateTime)doc[""""@metadata""""][""""Last-Modified""""] };
+"";
+		this.ForEntityNames.Add(null);
+		this.AddMapDefinition(docs => from doc in docs
+			let Tag = doc[""@metadata""][""Raven-Entity-Name""]
+			where Tag != null
+			select new { Tag, LastModified = (DateTime)doc[""@metadata""][""Last-Modified""], __document_id = doc.__document_id });
+		this.AddField(""LastModified"");
+		this.AddField(""__document_id"");
+		this.AddField(""Tag"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+
+Compiled to:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using Raven.Database.Indexing;
+public class Index_Raven_2fDocumentsByEntityName : AbstractViewGenerator
+{
+	public Index_Raven_2fDocumentsByEntityName()
+	{
+		this.ViewText = @""from doc in docs 
+let Tag = doc[""""@metadata""""][""""Raven-Entity-Name""""]
+where  Tag != null 
+select new { Tag, LastModified = (DateTime)doc[""""@metadata""""][""""Last-Modified""""] };
+"";
+		this.ForEntityNames.Add(null);
+		this.AddMapDefinition(docs => from doc in docs
+			let Tag = doc[""@metadata""][""Raven-Entity-Name""]
+			where Tag != null
+			select new { Tag, LastModified = (DateTime)doc[""@metadata""][""Last-Modified""], __document_id = doc.__document_id });
+		this.AddField(""LastModified"");
+		this.AddField(""__document_id"");
+		this.AddField(""Tag"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+";
+2012-01-03 12:45:17.4428;Raven.Database.Indexing.IndexStorage;Info;Creating index Raven/DocumentsByEntityName with encoded name Raven/DocumentsByEntityName;
+2012-01-03 12:45:17.4818;Raven.Database.Indexing.Index.Indexing;Debug;Creating index for Raven/DocumentsByEntityName;
+2012-01-03 12:45:17.9488;Raven.Database.Indexing.AbstractIndexingExecuter;Debug;Indexing 4 documents for index: Raven/DocumentsByEntityName;
+2012-01-03 12:45:18.1418;Raven.Database.Indexing.Index.Indexing;Debug;Index 'Raven/DocumentsByEntityName' resulted in: Document<stored/uncompressed,indexed,tokenized,omitNorms<__document_id:blogs/1> indexed,omitNorms<Tag:Blogs> indexed,omitNorms<LastModified:20120103114349424>>;
+2012-01-03 12:45:18.1648;Raven.Database.Indexing.Index.Indexing;Debug;Indexed 1 documents for Raven/DocumentsByEntityName;
+2012-01-03 12:45:22.9883;Raven.Database.Server.HttpServer;Debug;Request #  31: GET     -    19 ms - <default>  - 200 - /silverlight/plugins?noCache=1228478950;
+2012-01-03 12:45:23.5114;Raven.Database.Server.HttpServer;Debug;Request #  32: GET     -    16 ms - <default>  - 200 - /databases/?noCache=339070235;
+2012-01-03 12:45:23.5484;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/WarningMessages' was not found;
+2012-01-03 12:45:23.5484;Raven.Database.Server.HttpServer;Debug;Request #  33: GET     -     0 ms - <default>  - 404 - /docs/Raven/WarningMessages;
+2012-01-03 12:45:23.7234;Raven.Database.Server.HttpServer;Debug;Request #  34: GET     -    68 ms - <default>  - 200 - /stats?noCache=1562264701;
+2012-01-03 12:45:23.7664;Raven.Database.Server.HttpServer;Debug;Request #  35: GET     -    30 ms - <default>  - 200 - /terms/Raven/DocumentsByEntityName?field=Tag&fromValue=&pageSize=128&noCache=186220377;
+2012-01-03 12:45:23.8164;Raven.Database.Server.HttpServer;Debug;Request #  36: GET     -    14 ms - <default>  - 200 - /docs/?start=0&pageSize=12&noCache=-7068039;
+2012-01-03 12:45:23.9254;Raven.Database.Server.HttpServer;Debug;Request #  37: GET     -     2 ms - <default>  - 200 - /silverlight/ensureStartup?noCache=176135218;
+2012-01-03 12:45:24.0604;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Raven/DocumentsByEntityName for: Tag:Blogs;
+2012-01-03 12:45:24.0764;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:45:24.0784;Raven.Database.Server.HttpServer;Debug;Request #  38: GET     -    19 ms - <default>  - 0 - /indexes/Raven/DocumentsByEntityName?query=Tag%253ABlogs&start=0&pageSize=0&aggregation=None;
+2012-01-03 12:45:24.0784;Raven.Database.Server.HttpServer;Debug;Request #  39: GET     -     0 ms - <default>  - 200 - /terms/Raven/DocumentsByEntityName?field=Tag&fromValue=&pageSize=128&noCache=59357334;
+2012-01-03 12:45:24.0784;Raven.Database.Server.HttpServer;Debug;Request #  40: POST    -   144 ms - <default>  - 200 - /multi_get/;
+2012-01-03 12:45:24.1464;Raven.Database.Server.HttpServer;Debug;Request #  41: GET     -     0 ms - <default>  - 200 - /docs/?start=0&pageSize=12&noCache=1804776366;
+2012-01-03 12:45:24.2014;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Raven/DocumentsByEntityName for: Tag:Blogs;
+2012-01-03 12:45:24.2024;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:45:24.2024;Raven.Database.Server.HttpServer;Debug;Request #  42: GET     -     1 ms - <default>  - 0 - /indexes/Raven/DocumentsByEntityName?query=Tag%253ABlogs&start=0&pageSize=0&aggregation=None;
+2012-01-03 12:45:24.2024;Raven.Database.Server.HttpServer;Debug;Request #  43: POST    -    13 ms - <default>  - 200 - /multi_get/;
+2012-01-03 12:45:24.2804;Raven.Database.Server.HttpServer;Debug;Request #  44: GET     -     3 ms - <default>  - 404 - /static/SystemTemplate;
+2012-01-03 12:45:24.2804;Raven.Database.Server.HttpServer;Debug;Request #  45: GET     -     7 ms - <default>  - 404 - /static/blogsTemplate;
+2012-01-03 12:45:24.3815;Raven.Database.Server.HttpServer;Debug;Request #  46: GET     -     3 ms - <default>  - 200 - /build/version;
+2012-01-03 12:45:28.9929;Raven.Database.Server.HttpServer;Debug;Request #  47: GET     -    29 ms - <default>  - 200 - /stats?noCache=1417771150;
+2012-01-03 12:45:29.3030;Raven.Database.Server.HttpServer;Debug;Request #  48: GET     -     0 ms - <default>  - 200 - /docs/?start=0&pageSize=15&startsWith=blogs/1/&noCache=-1302496603;
+2012-01-03 12:45:39.0349;Raven.Database.Server.HttpServer;Debug;Request #  49: GET     -    36 ms - <default>  - 200 - /stats?noCache=-1067581919;
+2012-01-03 12:45:42.0852;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:45:42.0852;Raven.Database.Server.HttpServer;Debug;Request #  50: GET     -    21 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:45:42.0852;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 12:45:42.0962;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:45:42.0962;Raven.Database.Server.HttpServer;Debug;Request #  51: GET     -    31 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 12:45:43.3524;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:45:43.3524;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 12:45:43.3524;Raven.Database.Server.HttpServer;Debug;Request #  52: GET     -    28 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:45:43.3524;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:45:43.3524;Raven.Database.Server.HttpServer;Debug;Request #  53: GET     -    29 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 12:45:45.1455;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:45:45.1455;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 12:45:45.1455;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:45:45.1455;Raven.Database.Server.HttpServer;Debug;Request #  54: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:45:45.1455;Raven.Database.Server.HttpServer;Debug;Request #  55: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 12:45:55.1475;Raven.Database.Server.HttpServer;Debug;Request #  56: GET     -     2 ms - <default>  - 200 - /terms/Raven/DocumentsByEntityName?field=Tag&fromValue=&pageSize=128&noCache=1092181480;
+2012-01-03 12:45:55.1475;Raven.Database.Server.HttpServer;Debug;Request #  57: GET     -     2 ms - <default>  - 200 - /docs/?start=0&pageSize=12&noCache=1349613449;
+2012-01-03 12:45:55.2445;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Raven/DocumentsByEntityName for: Tag:Blogs;
+2012-01-03 12:45:55.2445;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:45:55.2445;Raven.Database.Server.HttpServer;Debug;Request #  58: GET     -     2 ms - <default>  - 0 - /indexes/Raven/DocumentsByEntityName?query=Tag%253ABlogs&start=0&pageSize=0&aggregation=None;
+2012-01-03 12:45:55.2475;Raven.Database.Server.HttpServer;Debug;Request #  59: POST    -     4 ms - <default>  - 200 - /multi_get/;
+2012-01-03 12:46:05.4976;Raven.Database.Server.HttpServer;Debug;Request #  60: GET     -    17 ms - <default>  - 200 - /docs/?start=0&pageSize=25&noCache=700603155;
+2012-01-03 12:46:05.6926;Raven.Database.Server.HttpServer;Debug;Request #  61: GET     -     0 ms - <default>  - 200 - /docs/?start=4&pageSize=96&noCache=-152514491;
+2012-01-03 12:46:06.5347;Raven.Database.Server.HttpServer;Debug;Request #  62: GET     -     2 ms - <default>  - 200 - /docs/?start=0&pageSize=12&noCache=-1107277507;
+2012-01-03 12:46:06.5347;Raven.Database.Server.HttpServer;Debug;Request #  63: GET     -     2 ms - <default>  - 200 - /terms/Raven/DocumentsByEntityName?field=Tag&fromValue=&pageSize=128&noCache=1059547115;
+2012-01-03 12:46:06.6047;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Raven/DocumentsByEntityName for: Tag:Blogs;
+2012-01-03 12:46:06.6047;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:46:06.6047;Raven.Database.Server.HttpServer;Debug;Request #  64: GET     -     2 ms - <default>  - 0 - /indexes/Raven/DocumentsByEntityName?query=Tag%253ABlogs&start=0&pageSize=0&aggregation=None;
+2012-01-03 12:46:06.6047;Raven.Database.Server.HttpServer;Debug;Request #  65: POST    -     4 ms - <default>  - 200 - /multi_get/;
+2012-01-03 12:48:31.4452;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 12:48:31.4452;Raven.Database.Server.HttpServer;Debug;Request #  66: GET     -    12 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 12:48:31.5362;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 12:48:31.5362;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 12:48:31.5362;Raven.Database.Server.HttpServer;Debug;Request #  67: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 12:54:56.1666;Raven.Database.Server.HttpServer;Debug;Request #  68: GET     -    97 ms - <default>  - 200 - /stats?noCache=-2027188091;
+2012-01-03 12:55:06.1166;Raven.Database.Server.HttpServer;Debug;Request #  69: GET     -    31 ms - <default>  - 200 - /stats?noCache=1523478980;
+2012-01-03 12:55:11.1441;Raven.Database.Server.HttpServer;Debug;Request #  70: GET     -    47 ms - <default>  - 200 - /stats?noCache=-1596337843;
+2012-01-03 12:55:16.1326;Raven.Database.Server.HttpServer;Debug;Request #  71: GET     -    30 ms - <default>  - 200 - /stats?noCache=-2054257744;
+2012-01-03 12:55:21.4542;Raven.Database.Server.HttpServer;Debug;Request #  72: GET     -   348 ms - <default>  - 200 - /stats?noCache=164628901;
+2012-01-03 12:55:36.1706;Raven.Database.Server.HttpServer;Debug;Request #  73: GET     -    41 ms - <default>  - 200 - /stats?noCache=-1724113962;
+2012-01-03 12:55:46.1976;Raven.Database.Server.HttpServer;Debug;Request #  74: GET     -    48 ms - <default>  - 200 - /stats?noCache=174784062;
+2012-01-03 12:55:56.3476;Raven.Database.Server.HttpServer;Debug;Request #  75: GET     -    28 ms - <default>  - 200 - /stats?noCache=-998137853;
+2012-01-03 12:56:06.4237;Raven.Database.Server.HttpServer;Debug;Request #  76: GET     -    71 ms - <default>  - 200 - /stats?noCache=-1597924086;
+2012-01-03 12:56:11.3862;Raven.Database.Server.HttpServer;Debug;Request #  77: GET     -    29 ms - <default>  - 200 - /stats?noCache=1787149625;
+2012-01-03 12:56:16.4317;Raven.Database.Server.HttpServer;Debug;Request #  78: GET     -    50 ms - <default>  - 200 - /stats?noCache=-930035550;
+2012-01-03 12:56:31.4622;Raven.Database.Server.HttpServer;Debug;Request #  79: GET     -    26 ms - <default>  - 200 - /stats?noCache=-468510820;
+2012-01-03 12:56:46.5987;Raven.Database.Server.HttpServer;Debug;Request #  80: GET     -    27 ms - <default>  - 200 - /stats?noCache=104081263;
+2012-01-03 12:56:51.6942;Raven.Database.Server.HttpServer;Debug;Request #  81: GET     -   118 ms - <default>  - 200 - /stats?noCache=1914611672;
+2012-01-03 12:57:21.6842;Raven.Database.Server.HttpServer;Debug;Request #  82: GET     -    59 ms - <default>  - 200 - /stats?noCache=-1587334923;
+2012-01-03 12:57:26.7007;Raven.Database.Server.HttpServer;Debug;Request #  83: GET     -    67 ms - <default>  - 200 - /stats?noCache=-537521951;
+2012-01-03 12:57:36.6737;Raven.Database.Server.HttpServer;Debug;Request #  84: GET     -    28 ms - <default>  - 200 - /stats?noCache=1828622264;
+2012-01-03 12:58:01.7752;Raven.Database.Server.HttpServer;Debug;Request #  85: GET     -    39 ms - <default>  - 200 - /stats?noCache=536209232;
+2012-01-03 12:58:16.9277;Raven.Database.Server.HttpServer;Debug;Request #  86: GET     -   169 ms - <default>  - 200 - /stats?noCache=-910343837;
+2012-01-03 12:58:26.8077;Raven.Database.Server.HttpServer;Debug;Request #  87: GET     -    37 ms - <default>  - 200 - /stats?noCache=398803086;
+2012-01-03 12:58:31.8902;Raven.Database.Server.HttpServer;Debug;Request #  88: GET     -   102 ms - <default>  - 200 - /stats?noCache=-440493726;
+2012-01-03 12:58:36.8157;Raven.Database.Server.HttpServer;Debug;Request #  89: GET     -    26 ms - <default>  - 200 - /stats?noCache=1243481586;
+2012-01-03 12:58:46.8617;Raven.Database.Server.HttpServer;Debug;Request #  90: GET     -    55 ms - <default>  - 200 - /stats?noCache=-2027873554;
+2012-01-03 12:59:06.8657;Raven.Database.Server.HttpServer;Debug;Request #  91: GET     -    28 ms - <default>  - 200 - /stats?noCache=722374751;
+2012-01-03 12:59:32.0982;Raven.Database.Server.HttpServer;Debug;Request #  92: GET     -    26 ms - <default>  - 200 - /stats?noCache=-826923202;
+2012-01-03 12:59:37.1447;Raven.Database.Server.HttpServer;Debug;Request #  93: GET     -    57 ms - <default>  - 200 - /stats?noCache=886544995;
+2012-01-03 12:59:42.1802;Raven.Database.Server.HttpServer;Debug;Request #  94: GET     -    81 ms - <default>  - 200 - /stats?noCache=150359395;
+2012-01-03 12:59:47.1327;Raven.Database.Server.HttpServer;Debug;Request #  95: GET     -    27 ms - <default>  - 200 - /stats?noCache=-564754218;
+2012-01-03 12:59:57.1577;Raven.Database.Server.HttpServer;Debug;Request #  96: GET     -    40 ms - <default>  - 200 - /stats?noCache=679271558;
+2012-01-03 13:00:12.5583;Raven.Database.Server.HttpServer;Debug;Request #  97: GET     -   356 ms - <default>  - 200 - /stats?noCache=-808705419;
+2012-01-03 13:00:32.2652;Raven.Database.Server.HttpServer;Debug;Request #  98: GET     -    30 ms - <default>  - 200 - /stats?noCache=2040103243;
+2012-01-03 13:00:37.2837;Raven.Database.Server.HttpServer;Debug;Request #  99: GET     -    37 ms - <default>  - 200 - /stats?noCache=-1042639105;
+2012-01-03 13:00:42.2832;Raven.Database.Server.HttpServer;Debug;Request # 100: GET     -    30 ms - <default>  - 200 - /stats?noCache=-1870634405;
+2012-01-03 13:00:47.2867;Raven.Database.Server.HttpServer;Debug;Request # 101: GET     -    28 ms - <default>  - 200 - /stats?noCache=1831680780;
+2012-01-03 13:00:52.3122;Raven.Database.Server.HttpServer;Debug;Request # 102: GET     -    44 ms - <default>  - 200 - /stats?noCache=1083307208;
+2012-01-03 13:01:02.3462;Raven.Database.Server.HttpServer;Debug;Request # 103: GET     -    60 ms - <default>  - 200 - /stats?noCache=-1369661506;
+2012-01-03 13:01:07.3747;Raven.Database.Server.HttpServer;Debug;Request # 104: GET     -    26 ms - <default>  - 200 - /stats?noCache=-58477140;
+2012-01-03 13:01:22.5173;Raven.Database.Server.HttpServer;Debug;Request # 105: GET     -    81 ms - <default>  - 200 - /stats?noCache=-1250758754;
+2012-01-03 13:01:27.4838;Raven.Database.Server.HttpServer;Debug;Request # 106: GET     -    40 ms - <default>  - 200 - /stats?noCache=111351221;
+2012-01-03 13:01:47.5108;Raven.Database.Server.HttpServer;Debug;Request # 107: GET     -    31 ms - <default>  - 200 - /stats?noCache=-882971588;
+2012-01-03 13:02:17.5508;Raven.Database.Server.HttpServer;Debug;Request # 108: GET     -    29 ms - <default>  - 200 - /stats?noCache=-1157910243;
+2012-01-03 13:02:37.7118;Raven.Database.Server.HttpServer;Debug;Request # 109: GET     -    34 ms - <default>  - 200 - /stats?noCache=2024526738;
+2012-01-03 13:02:42.7163;Raven.Database.Server.HttpServer;Debug;Request # 110: GET     -    26 ms - <default>  - 200 - /stats?noCache=-1364750431;
+2012-01-03 13:02:52.7643;Raven.Database.Server.HttpServer;Debug;Request # 111: GET     -    62 ms - <default>  - 200 - /stats?noCache=206975471;
+2012-01-03 13:03:07.7608;Raven.Database.Server.HttpServer;Debug;Request # 112: GET     -    29 ms - <default>  - 200 - /stats?noCache=1960499674;
+2012-01-03 13:03:12.7803;Raven.Database.Server.HttpServer;Debug;Request # 113: GET     -    41 ms - <default>  - 200 - /stats?noCache=2015657717;
+2012-01-03 13:03:17.8648;Raven.Database.Server.HttpServer;Debug;Request # 114: GET     -   119 ms - <default>  - 200 - /stats?noCache=-899010868;
+2012-01-03 13:03:27.7938;Raven.Database.Server.HttpServer;Debug;Request # 115: GET     -    28 ms - <default>  - 200 - /stats?noCache=-1365138199;
+2012-01-03 13:03:32.8003;Raven.Database.Server.HttpServer;Debug;Request # 116: GET     -    26 ms - <default>  - 200 - /stats?noCache=-286495435;
+2012-01-03 13:03:42.8513;Raven.Database.Server.HttpServer;Debug;Request # 117: GET     -    69 ms - <default>  - 200 - /stats?noCache=-273405267;
+2012-01-03 13:03:48.2358;Raven.Database.Server.HttpServer;Debug;Request # 118: GET     -   444 ms - <default>  - 200 - /stats?noCache=-863803327;
+2012-01-03 13:04:23.0313;Raven.Database.Server.HttpServer;Debug;Request # 119: GET     -    76 ms - <default>  - 200 - /stats?noCache=1155285572;
+2012-01-03 13:04:48.0758;Raven.Database.Server.HttpServer;Debug;Request # 120: GET     -    63 ms - <default>  - 200 - /stats?noCache=1754087982;
+2012-01-03 13:04:53.1163;Raven.Database.Server.HttpServer;Debug;Request # 121: GET     -    98 ms - <default>  - 200 - /stats?noCache=554096648;
+2012-01-03 13:05:03.1583;Raven.Database.Server.HttpServer;Debug;Request # 122: GET     -   120 ms - <default>  - 200 - /stats?noCache=800126653;
+2012-01-03 13:05:23.1313;Raven.Database.Server.HttpServer;Debug;Request # 123: GET     -    65 ms - <default>  - 200 - /stats?noCache=-1935464734;
+2012-01-03 13:05:28.1098;Raven.Database.Server.HttpServer;Debug;Request # 124: GET     -    26 ms - <default>  - 200 - /stats?noCache=1043141684;
+2012-01-03 13:05:38.2598;Raven.Database.Server.HttpServer;Debug;Request # 125: GET     -    46 ms - <default>  - 200 - /stats?noCache=2100239625;
+2012-01-03 13:05:53.2813;Raven.Database.Server.HttpServer;Debug;Request # 126: GET     -    29 ms - <default>  - 200 - /stats?noCache=-1969644719;
+2012-01-03 13:06:13.3673;Raven.Database.Server.HttpServer;Debug;Request # 127: GET     -    87 ms - <default>  - 200 - /stats?noCache=-1387513935;
+2012-01-03 13:06:28.3368;Raven.Database.Server.HttpServer;Debug;Request # 128: GET     -    28 ms - <default>  - 200 - /stats?noCache=-1484827684;
+2012-01-03 13:06:38.3538;Raven.Database.Server.HttpServer;Debug;Request # 129: GET     -    29 ms - <default>  - 200 - /stats?noCache=1385261495;
+2012-01-03 13:06:58.3948;Raven.Database.Server.HttpServer;Debug;Request # 130: GET     -    35 ms - <default>  - 200 - /stats?noCache=192701835;
+2012-01-03 13:07:08.5699;Raven.Database.Server.HttpServer;Debug;Request # 131: GET     -    44 ms - <default>  - 200 - /stats?noCache=-2044924779;
+2012-01-03 13:07:31.3381;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:07:31.3381;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 13:07:31.3381;Raven.Database.Server.HttpServer;Debug;Request # 132: GET     -    36 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:07:31.3381;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:07:31.3381;Raven.Database.Server.HttpServer;Debug;Request # 133: GET     -    31 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:07:33.2123;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:07:33.2123;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 13:07:33.2123;Raven.Database.Server.HttpServer;Debug;Request # 134: GET     -    37 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:07:33.2123;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:07:33.2163;Raven.Database.Server.HttpServer;Debug;Request # 135: GET     -    38 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:07:38.7409;Raven.Database.Server.HttpServer;Debug;Request # 136: GET     -    28 ms - <default>  - 200 - /stats?noCache=1504716920;
+2012-01-03 13:07:49.5060;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:07:49.5060;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 13:07:49.5060;Raven.Database.Server.HttpServer;Debug;Request # 137: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:07:49.5060;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:07:49.5060;Raven.Database.Server.HttpServer;Debug;Request # 138: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:07:53.8734;Raven.Database.Server.HttpServer;Debug;Request # 139: GET     -    88 ms - <default>  - 200 - /stats?noCache=-1652468852;
+2012-01-03 13:08:07.2687;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:08:07.2687;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 13:08:07.2687;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:08:07.2687;Raven.Database.Server.HttpServer;Debug;Request # 140: GET     -     1 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:08:07.2687;Raven.Database.Server.HttpServer;Debug;Request # 141: GET     -     2 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 13:08:13.7714;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:08:13.7714;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 13:08:13.7714;Raven.Database.Server.HttpServer;Debug;Request # 142: GET     -    14 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:08:13.7714;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:08:13.7714;Raven.Database.Server.HttpServer;Debug;Request # 143: GET     -    17 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:09:52.0522;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:09:52.0522;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 13:09:52.0522;Raven.Database.Server.HttpServer;Debug;Request # 144: GET     -     1 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:09:52.0522;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:09:52.0522;Raven.Database.Server.HttpServer;Debug;Request # 145: GET     -     5 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:09:53.9594;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:09:53.9594;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 13:09:53.9594;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:09:53.9594;Raven.Database.Server.HttpServer;Debug;Request # 146: GET     -   112 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:09:53.9594;Raven.Database.Server.HttpServer;Debug;Request # 147: GET     -   113 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 13:09:54.4325;Raven.Database.Server.HttpServer;Debug;Request # 148: GET     -    56 ms - <default>  - 200 - /stats?noCache=-439071594;
+2012-01-03 13:09:55.8276;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:09:55.8276;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 13:09:55.8276;Raven.Database.Server.HttpServer;Debug;Request # 149: GET     -   105 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:09:55.8276;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:09:55.8276;Raven.Database.Server.HttpServer;Debug;Request # 150: GET     -   108 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:09:57.6968;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:09:57.6968;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 13:09:57.6968;Raven.Database.Server.HttpServer;Debug;Request # 151: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:09:57.6968;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:09:57.6968;Raven.Database.Server.HttpServer;Debug;Request # 152: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:10:08.4158;Raven.Database.Server.HttpServer;Debug;Request # 153: GET     -     0 ms - <default>  - 200 - /docs/?start=0&pageSize=15&startsWith=blogs/1/&noCache=1227987395;
+2012-01-03 13:13:36.1476;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:13:36.1476;Raven.Database.Server.HttpServer;Debug;Request # 154: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:13:36.2616;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 13:13:36.2616;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:13:36.2616;Raven.Database.Server.HttpServer;Debug;Request # 155: GET     -     1 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 13:13:40.1940;Raven.Database.Server.HttpServer;Debug;Request # 156: GET     -    26 ms - <default>  - 200 - /stats?noCache=-757699254;
+2012-01-03 13:13:43.2843;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:13:43.2843;Raven.Database.Server.HttpServer;Debug;Request # 157: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:13:43.3663;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 13:13:43.3663;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:13:43.3663;Raven.Database.Server.HttpServer;Debug;Request # 158: GET     -    17 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:14:50.5471;Raven.Database.Server.HttpServer;Debug;Request # 159: GET     -   164 ms - <default>  - 200 - /stats?noCache=-19271190;
+2012-01-03 13:15:10.5141;Raven.Database.Server.HttpServer;Debug;Request # 160: GET     -    33 ms - <default>  - 200 - /stats?noCache=46619403;
+2012-01-03 13:15:25.5696;Raven.Database.Server.HttpServer;Debug;Request # 161: GET     -    48 ms - <default>  - 200 - /stats?noCache=-1585856371;
+2012-01-03 13:15:40.3930;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:15:40.3930;Raven.Database.Server.HttpServer;Debug;Request # 162: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:15:40.3970;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 13:15:40.3970;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:15:40.3970;Raven.Database.Server.HttpServer;Debug;Request # 163: GET     -     5 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:15:40.5831;Raven.Database.Server.HttpServer;Debug;Request # 164: GET     -    43 ms - <default>  - 200 - /stats?noCache=-1624723027;
+2012-01-03 13:15:49.4920;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:15:49.4920;Raven.Database.Server.HttpServer;Debug;Request # 165: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:15:49.4920;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 13:15:49.4920;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:15:49.4920;Raven.Database.Server.HttpServer;Debug;Request # 166: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:17:04.7005;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:17:04.7005;Raven.Database.Server.HttpServer;Debug;Request # 167: GET     -    43 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:17:34.7655;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 13:17:34.7665;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:17:34.7665;Raven.Database.Server.HttpServer;Debug;Request # 168: GET     -     4 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:17:37.7608;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:17:37.7608;Raven.Database.Server.HttpServer;Debug;Request # 169: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:17:37.7618;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 13:17:37.7618;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:17:37.7618;Raven.Database.Server.HttpServer;Debug;Request # 170: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 13:17:39.2829;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:17:39.2829;Raven.Database.Server.HttpServer;Debug;Request # 171: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:17:39.2829;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 13:17:39.2829;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:17:39.2829;Raven.Database.Server.HttpServer;Debug;Request # 172: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:17:40.8701;Raven.Database.Server.HttpServer;Debug;Request # 173: GET     -    40 ms - <default>  - 200 - /stats?noCache=494222582;
+2012-01-03 13:19:56.2326;Raven.Database.Server.HttpServer;Debug;Request # 174: GET     -    26 ms - <default>  - 200 - /stats?noCache=-1977237741;
+2012-01-03 13:21:57.5658;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:0;
+2012-01-03 13:21:57.5858;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:21:57.5858;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:21:57.5858;Raven.Database.Server.HttpServer;Debug;Request # 175: GET     -    22 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:21:57.5858;Raven.Database.Server.HttpServer;Debug;Request # 176: GET     -    23 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A0&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:22:01.6202;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:22:01.6202;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 13:22:01.6202;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:22:01.6202;Raven.Database.Server.HttpServer;Debug;Request # 177: GET     -     1 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:22:01.6202;Raven.Database.Server.HttpServer;Debug;Request # 178: GET     -     2 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 13:22:04.6735;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:22:04.6745;Raven.Database.Server.HttpServer;Debug;Request # 179: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:22:04.6745;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 13:22:04.6745;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:22:04.6745;Raven.Database.Server.HttpServer;Debug;Request # 180: GET     -     2 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:22:40.0870;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:22:40.0870;Raven.Database.Server.HttpServer;Debug;Request # 181: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:22:43.9974;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 13:22:43.9974;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:22:43.9974;Raven.Database.Server.HttpServer;Debug;Request # 182: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:23:23.7724;Raven.Database.Server.HttpServer;Debug;Request # 183: GET     -     2 ms - <default>  - 200 - /terms/Raven/DocumentsByEntityName?field=Tag&fromValue=&pageSize=128&noCache=-731817769;
+2012-01-03 13:23:23.7724;Raven.Database.Server.HttpServer;Debug;Request # 184: GET     -     3 ms - <default>  - 200 - /docs/?start=0&pageSize=12&noCache=1859076402;
+2012-01-03 13:23:23.7724;Raven.Database.Server.HttpServer;Debug;Request # 185: GET     -     0 ms - <default>  - 200 - /silverlight/ensureStartup?noCache=902948953;
+2012-01-03 13:23:23.7724;Raven.Database.Server.HttpServer;Debug;Request # 186: GET     -     0 ms - <default>  - 200 - /docs/?start=0&pageSize=15&startsWith=blogs/1/&noCache=-1087502427;
+2012-01-03 13:23:23.9314;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Raven/DocumentsByEntityName for: Tag:Blogs;
+2012-01-03 13:23:23.9314;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:23:23.9314;Raven.Database.Server.HttpServer;Debug;Request # 187: GET     -     2 ms - <default>  - 0 - /indexes/Raven/DocumentsByEntityName?query=Tag%253ABlogs&start=0&pageSize=0&aggregation=None;
+2012-01-03 13:23:23.9314;Raven.Database.Server.HttpServer;Debug;Request # 188: POST    -     3 ms - <default>  - 200 - /multi_get/;
+2012-01-03 13:23:40.5401;Raven.Database.DocumentDatabase;Debug;Putting a document with key: blogs/1 and etag 00000000-0000-0200-0000-000000000004;
+2012-01-03 13:23:40.5441;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Inserted a new document with key 'blogs/1', update: True, ;
+2012-01-03 13:23:40.5441;Raven.Database.Indexing.AbstractIndexingExecuter;Debug;Indexing 1 documents for index: Raven/DocumentsByEntityName;
+2012-01-03 13:23:40.5441;Raven.Database.Indexing.AbstractIndexingExecuter;Debug;Indexing 1 documents for index: Temp/Blogs/ByBlogPosts_Id;
+2012-01-03 13:23:40.5441;Raven.Database.Indexing.Index.Indexing;Debug;Index 'Temp/Blogs/ByBlogPosts_Id' resulted in: Document<stored/uncompressed,indexed,tokenized,omitNorms<__document_id:blogs/1> indexed,omitNorms<BlogPosts_Id:1> indexed,tokenized,omitNorms,omitTermFreqAndPositions<BlogPosts_Id_Range:1>>;
+2012-01-03 13:23:40.5441;Raven.Database.Indexing.Index.Indexing;Debug;Index 'Raven/DocumentsByEntityName' resulted in: Document<stored/uncompressed,indexed,tokenized,omitNorms<__document_id:blogs/1> indexed,omitNorms<Tag:Blogs> indexed,omitNorms<LastModified:20120103122340544>>;
+2012-01-03 13:23:40.5441;Raven.Database.Server.HttpServer;Debug;Request # 189: PUT     -     8 ms - <default>  - 201 - /docs/blogs/1;
+2012-01-03 13:23:40.5441;Raven.Database.Indexing.Index.Indexing;Debug;Index 'Temp/Blogs/ByBlogPosts_Id' resulted in: Document<stored/uncompressed,indexed,tokenized,omitNorms<__document_id:blogs/1> indexed,omitNorms<BlogPosts_Id:2> indexed,tokenized,omitNorms,omitTermFreqAndPositions<BlogPosts_Id_Range:2>>;
+2012-01-03 13:23:40.5441;Raven.Database.Indexing.AbstractIndexingExecuter;Debug;Indexing 1 documents for index: Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 13:23:40.5441;Raven.Database.Indexing.Index.Indexing;Debug;Index 'Temp/Blogs/ByCreateDateSortByCreateDate' resulted in: Document<stored/uncompressed,indexed,tokenized,omitNorms<__document_id:blogs/1> indexed,omitNorms<CreateDate:00010101000000000>>;
+2012-01-03 13:23:40.5581;Raven.Database.Indexing.Index.Indexing;Debug;Indexed 1 documents for Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 13:23:40.5581;Raven.Database.Indexing.Index.Indexing;Debug;Indexed 1 documents for Raven/DocumentsByEntityName;
+2012-01-03 13:23:40.5581;Raven.Database.Indexing.Index.Indexing;Debug;Indexed 2 documents for Temp/Blogs/ByBlogPosts_Id;
+2012-01-03 13:23:45.1865;Raven.Database.Server.HttpServer;Debug;Request # 190: GET     -    16 ms - <default>  - 200 - /docs/?start=0&pageSize=12&noCache=-171057397;
+2012-01-03 13:23:45.1865;Raven.Database.Server.HttpServer;Debug;Request # 191: GET     -    18 ms - <default>  - 200 - /terms/Raven/DocumentsByEntityName?field=Tag&fromValue=&pageSize=128&noCache=-1261031580;
+2012-01-03 13:23:45.1865;Raven.Database.Server.HttpServer;Debug;Request # 192: GET     -     0 ms - <default>  - 200 - /silverlight/ensureStartup?noCache=-886210341;
+2012-01-03 13:23:45.1935;Raven.Database.Server.HttpServer;Debug;Request # 193: GET     -     1 ms - <default>  - 200 - /docs/?start=0&pageSize=15&startsWith=blogs/1/&noCache=1423455774;
+2012-01-03 13:23:45.3225;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Raven/DocumentsByEntityName for: Tag:Blogs;
+2012-01-03 13:23:45.3225;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:23:45.3225;Raven.Database.Server.HttpServer;Debug;Request # 194: GET     -     2 ms - <default>  - 0 - /indexes/Raven/DocumentsByEntityName?query=Tag%253ABlogs&start=0&pageSize=0&aggregation=None;
+2012-01-03 13:23:45.3225;Raven.Database.Server.HttpServer;Debug;Request # 195: POST    -     3 ms - <default>  - 200 - /multi_get/;
+2012-01-03 13:23:49.3549;Raven.Database.Server.HttpServer;Debug;Request # 196: GET     -     0 ms - <default>  - 200 - /terms/Raven/DocumentsByEntityName?field=Tag&fromValue=&pageSize=128&noCache=-726729337;
+2012-01-03 13:23:49.3559;Raven.Database.Server.HttpServer;Debug;Request # 197: GET     -     1 ms - <default>  - 200 - /docs/?start=0&pageSize=12&noCache=487826333;
+2012-01-03 13:23:49.4509;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Raven/DocumentsByEntityName for: Tag:Blogs;
+2012-01-03 13:23:49.4509;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:23:49.4509;Raven.Database.Server.HttpServer;Debug;Request # 198: GET     -     1 ms - <default>  - 0 - /indexes/Raven/DocumentsByEntityName?query=Tag%253ABlogs&start=0&pageSize=0&aggregation=None;
+2012-01-03 13:23:49.4509;Raven.Database.Server.HttpServer;Debug;Request # 199: POST    -     3 ms - <default>  - 200 - /multi_get/;
+2012-01-03 13:23:51.1701;Raven.Database.Server.HttpServer;Debug;Request # 200: GET     -     0 ms - <default>  - 200 - /docs/?start=0&pageSize=15&startsWith=blogs/1/&noCache=1858039560;
+2012-01-03 13:23:59.5290;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 13:23:59.5290;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:23:59.5290;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:23:59.5290;Raven.Database.Server.HttpServer;Debug;Request # 201: GET     -    12 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:23:59.5290;Raven.Database.Server.HttpServer;Debug;Request # 202: GET     -    12 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 13:24:04.6395;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 13:24:04.6535;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:24:04.6535;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:24:04.6535;Raven.Database.Server.HttpServer;Debug;Request # 203: GET     -    15 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:24:04.6535;Raven.Database.Server.HttpServer;Debug;Request # 204: GET     -    15 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:24:21.7872;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:1;
+2012-01-03 13:24:21.8032;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:24:21.8032;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:24:21.8032;Raven.Database.Server.HttpServer;Debug;Request # 205: GET     -    17 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:24:21.8032;Raven.Database.Server.HttpServer;Debug;Request # 206: GET     -    17 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:24:24.3784;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:24:24.3794;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 13:24:24.3784;Raven.Database.Server.HttpServer;Debug;Request # 207: GET     -    21 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:24:24.3794;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:24:24.3794;Raven.Database.Server.HttpServer;Debug;Request # 208: GET     -    23 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 13:24:27.0757;Raven.Database.Server.HttpServer;Debug;Request # 209: GET     -    42 ms - <default>  - 200 - /stats?noCache=420489008;
+2012-01-03 13:24:28.3558;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:24:28.3558;Raven.Database.Server.HttpServer;Debug;Request # 210: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:24:28.3588;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for: __document_id:blogs/1;
+2012-01-03 13:24:28.3588;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:24:28.3588;Raven.Database.Server.HttpServer;Debug;Request # 211: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=__document_id%253Ablogs%252F1&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:24:34.2274;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:24:34.2274;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByBlogPosts_Id for: BlogPosts_Id:2;
+2012-01-03 13:24:34.2274;Raven.Database.Server.HttpServer;Debug;Request # 212: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:24:34.2274;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:24:34.2274;Raven.Database.Server.HttpServer;Debug;Request # 213: GET     -     3 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=BlogPosts%252CId%253A2&start=0&pageSize=1&aggregation=None;
+2012-01-03 13:24:38.1568;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'Raven/Replication/Destinations' was not found;
+2012-01-03 13:24:38.1568;Raven.Database.Server.HttpServer;Debug;Request # 214: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations;
+2012-01-03 13:24:38.1568;Raven.Database.Indexing.Index.Querying;Debug;Issuing query on index Temp/Blogs/ByCreateDateSortByCreateDate for all documents;
+2012-01-03 13:24:38.1568;Raven.Storage.Esent.StorageActions.DocumentStorageActions;Debug;Document with key 'blogs/1' was found;
+2012-01-03 13:24:38.1568;Raven.Database.Server.HttpServer;Debug;Request # 215: GET     -     2 ms - <default>  - 200 - /indexes/dynamic/Blogs?query=&start=0&pageSize=10&aggregation=None&sort=CreateDate;
+2012-01-03 13:30:13.0593;Raven.Database.Server.HttpServer;Debug;Request # 216: GET     -    30 ms - <default>  - 200 - /stats?noCache=-677145227;
+2012-01-03 13:30:33.1273;Raven.Database.Server.HttpServer;Debug;Request # 217: GET     -    32 ms - <default>  - 200 - /stats?noCache=-1308001857;
+2012-01-03 13:30:38.3848;Raven.Database.Server.HttpServer;Debug;Request # 218: GET     -   170 ms - <default>  - 200 - /stats?noCache=-922144666;
+2012-01-03 13:30:48.2638;Raven.Database.Server.HttpServer;Debug;Request # 219: GET     -    60 ms - <default>  - 200 - /stats?noCache=1022780099;
+2012-01-03 13:30:53.2523;Raven.Database.Server.HttpServer;Debug;Request # 220: GET     -    44 ms - <default>  - 200 - /stats?noCache=1039039198;
+2012-01-03 13:31:03.4203;Raven.Database.Server.HttpServer;Debug;Request # 221: GET     -   110 ms - <default>  - 200 - /stats?noCache=601313300;
+2012-01-03 13:31:18.3868;Raven.Database.Server.HttpServer;Debug;Request # 222: GET     -    42 ms - <default>  - 200 - /stats?noCache=-2089203928;
+2012-01-03 13:31:23.4903;Raven.Database.Server.HttpServer;Debug;Request # 223: GET     -   145 ms - <default>  - 200 - /stats?noCache=-76373519;
+2012-01-03 13:31:28.3918;Raven.Database.Server.HttpServer;Debug;Request # 224: GET     -    42 ms - <default>  - 200 - /stats?noCache=-995600949;
+2012-01-03 13:31:38.4378;Raven.Database.Server.HttpServer;Debug;Request # 225: GET     -    31 ms - <default>  - 200 - /stats?noCache=198822858;
+2012-01-03 13:31:43.5033;Raven.Database.Server.HttpServer;Debug;Request # 226: GET     -    61 ms - <default>  - 200 - /stats?noCache=-245060274;
+2012-01-03 13:32:08.5739;Raven.Database.Server.HttpServer;Debug;Request # 227: GET     -   100 ms - <default>  - 200 - /stats?noCache=205210046;
+2012-01-03 13:32:18.5799;Raven.Database.Server.HttpServer;Debug;Request # 228: GET     -    27 ms - <default>  - 200 - /stats?noCache=-1317583116;
+2012-01-03 13:32:38.6559;Raven.Database.Server.HttpServer;Debug;Request # 229: GET     -    26 ms - <default>  - 200 - /stats?noCache=663944011;
+2012-01-03 13:32:59.1669;Raven.Database.Server.HttpServer;Debug;Request # 230: GET     -    62 ms - <default>  - 200 - /stats?noCache=-170132968;
+2012-01-03 13:33:29.2739;Raven.Database.Server.HttpServer;Debug;Request # 231: GET     -    96 ms - <default>  - 200 - /stats?noCache=-2093988854;
+2012-01-03 13:35:24.6365;Raven.Database.Server.HttpServer;Debug;Request # 232: GET     -    30 ms - <default>  - 200 - /stats?noCache=1673400913;
+2012-01-03 13:35:49.8580;Raven.Database.Server.HttpServer;Debug;Request # 233: GET     -    68 ms - <default>  - 200 - /stats?noCache=1183143265;
+2012-01-03 13:36:19.8670;Raven.Database.Server.HttpServer;Debug;Request # 234: GET     -    27 ms - <default>  - 200 - /stats?noCache=1695219545;
+2012-01-03 13:36:29.8940;Raven.Database.Server.HttpServer;Debug;Request # 235: GET     -    44 ms - <default>  - 200 - /stats?noCache=200443171;
+2012-01-03 13:37:20.1760;Raven.Database.Server.HttpServer;Debug;Request # 236: GET     -    30 ms - <default>  - 200 - /stats?noCache=-166733583;
+2012-01-03 13:38:25.3045;Raven.Database.Server.HttpServer;Debug;Request # 237: GET     -    40 ms - <default>  - 200 - /stats?noCache=1983942011;
+2012-01-03 13:41:42.5742;Raven.Database.Server.HttpServer;Debug;Request # 238: GET     -   283 ms - <default>  - 200 - /stats?noCache=2145308024;
+2012-01-03 13:41:52.3352;Raven.Database.Server.HttpServer;Debug;Request # 239: GET     -    26 ms - <default>  - 200 - /stats?noCache=810973470;
+2012-01-03 13:42:02.5042;Raven.Database.Server.HttpServer;Debug;Request # 240: GET     -   180 ms - <default>  - 200 - /stats?noCache=906875691;
+2012-01-03 13:42:12.3862;Raven.Database.Server.HttpServer;Debug;Request # 241: GET     -    48 ms - <default>  - 200 - /stats?noCache=740051833;
+2012-01-03 13:42:22.3852;Raven.Database.Server.HttpServer;Debug;Request # 242: GET     -    28 ms - <default>  - 200 - /stats?noCache=1118553816;
+2012-01-03 13:44:47.8908;Raven.Database.Server.HttpServer;Debug;Request # 243: GET     -    80 ms - <default>  - 200 - /stats?noCache=1718764448;
+2012-01-03 13:45:32.9253;Raven.Database.Server.HttpServer;Debug;Request # 244: GET     -    39 ms - <default>  - 200 - /stats?noCache=-245385674;
+2012-01-03 13:49:53.6483;Raven.Database.Server.HttpServer;Debug;Request # 245: GET     -    29 ms - <default>  - 200 - /stats?noCache=1165981123;
+2012-01-03 13:50:43.7184;Raven.Database.Server.HttpServer;Debug;Request # 246: GET     -    29 ms - <default>  - 200 - /stats?noCache=-1932809473;
+2012-01-03 13:52:54.2334;Raven.Database.Server.HttpServer;Debug;Request # 247: GET     -    38 ms - <default>  - 200 - /stats?noCache=-2070489041;
+2012-01-03 13:53:39.3619;Raven.Database.Server.HttpServer;Debug;Request # 248: GET     -    96 ms - <default>  - 200 - /stats?noCache=1097372796;
+2012-01-03 13:53:40.6430;Raven.Database.Indexing.IndexStorage;Info;Deleting index Temp/Blogs/ByBlogPosts_Id;
+2012-01-03 13:53:40.6520;Raven.Database.Indexing.IndexStorage;Info;Deleting index Temp/Blogs/ByCreateDateSortByCreateDate;
+2012-01-03 13:53:44.3024;Raven.Database.Server.HttpServer;Debug;Request # 249: GET     -    29 ms - <default>  - 200 - /stats?noCache=1959931518;
+2012-01-03 13:53:49.3189;Raven.Database.Server.HttpServer;Debug;Request # 250: GET     -    38 ms - <default>  - 200 - /stats?noCache=-1797791802;
+2012-01-03 13:54:14.5204;Raven.Database.Server.HttpServer;Debug;Request # 251: GET     -   183 ms - <default>  - 200 - /stats?noCache=1525799552;
+2012-01-03 13:54:44.4134;Raven.Database.Server.HttpServer;Debug;Request # 252: GET     -    26 ms - <default>  - 200 - /stats?noCache=428133102;
+2012-01-03 13:56:14.6174;Raven.Database.Server.HttpServer;Debug;Request # 253: GET     -    28 ms - <default>  - 200 - /stats?noCache=-579972331;
+2012-01-03 13:56:25.4655;Raven.Database.Server.HttpServer;Debug;Request # 254: GET     -   203 ms - <default>  - 200 - /stats?noCache=416285784;
+2012-01-03 13:56:30.3530;Raven.Database.Server.HttpServer;Debug;Request # 255: GET     -    75 ms - <default>  - 200 - /stats?noCache=-794376119;
+2012-01-03 13:56:35.3745;Raven.Database.Server.HttpServer;Debug;Request # 256: GET     -    94 ms - <default>  - 200 - /stats?noCache=-944049045;
+2012-01-03 13:56:40.3290;Raven.Database.Server.HttpServer;Debug;Request # 257: GET     -    40 ms - <default>  - 200 - /stats?noCache=-468513098;
+2012-01-03 13:56:50.7751;Raven.Database.Server.HttpServer;Debug;Request # 258: GET     -    30 ms - <default>  - 200 - /stats?noCache=-2014965983;
+2012-01-03 13:57:10.9611;Raven.Database.Server.HttpServer;Debug;Request # 259: GET     -    27 ms - <default>  - 200 - /stats?noCache=1631522962;
+2012-01-03 13:57:21.0341;Raven.Database.Server.HttpServer;Debug;Request # 260: GET     -    90 ms - <default>  - 200 - /stats?noCache=1448447738;
+2012-01-03 13:57:30.9891;Raven.Database.Server.HttpServer;Debug;Request # 261: GET     -    31 ms - <default>  - 200 - /stats?noCache=-1786420703;
+2012-01-03 13:57:51.6161;Raven.Database.Server.HttpServer;Debug;Request # 262: GET     -   482 ms - <default>  - 200 - /stats?noCache=-1141871259;
+2012-01-03 13:57:56.5876;Raven.Database.Server.HttpServer;Debug;Request # 263: GET     -   483 ms - <default>  - 200 - /stats?noCache=1354100805;
+2012-01-03 13:58:01.3361;Raven.Database.Server.HttpServer;Debug;Request # 264: GET     -   222 ms - <default>  - 200 - /stats?noCache=-1221299385;
+2012-01-03 13:58:06.4686;Raven.Database.Server.HttpServer;Debug;Request # 265: GET     -   318 ms - <default>  - 200 - /stats?noCache=1050805468;
+2012-01-03 13:58:11.1831;Raven.Database.Server.HttpServer;Debug;Request # 266: GET     -    27 ms - <default>  - 200 - /stats?noCache=1885920253;
+2012-01-03 13:58:16.4286;Raven.Database.Server.HttpServer;Debug;Request # 267: GET     -   158 ms - <default>  - 200 - /stats?noCache=215862710;
+2012-01-03 13:58:21.2351;Raven.Database.Server.HttpServer;Debug;Request # 268: GET     -    29 ms - <default>  - 200 - /stats?noCache=1708404043;
+2012-01-03 13:58:41.3761;Raven.Database.Server.HttpServer;Debug;Request # 269: GET     -   142 ms - <default>  - 200 - /stats?noCache=237340536;
+2012-01-03 13:59:06.5336;Raven.Database.Server.HttpServer;Debug;Request # 270: GET     -   131 ms - <default>  - 200 - /stats?noCache=-1895970487;
+2012-01-03 13:59:11.4331;Raven.Database.Server.HttpServer;Debug;Request # 271: GET     -    27 ms - <default>  - 200 - /stats?noCache=1507552706;
+2012-01-03 13:59:16.6176;Raven.Database.Server.HttpServer;Debug;Request # 272: GET     -   185 ms - <default>  - 200 - /stats?noCache=-1229063618;
+2012-01-03 13:59:21.4811;Raven.Database.Server.HttpServer;Debug;Request # 273: GET     -    29 ms - <default>  - 200 - /stats?noCache=-2108657282;
+2012-01-03 13:59:26.5026;Raven.Database.Server.HttpServer;Debug;Request # 274: GET     -    36 ms - <default>  - 200 - /stats?noCache=111052422;
+2012-01-03 13:59:31.5021;Raven.Database.Server.HttpServer;Debug;Request # 275: GET     -    28 ms - <default>  - 200 - /stats?noCache=58315072;
+2012-01-03 13:59:37.3437;Raven.Database.Server.HttpServer;Debug;Request # 276: GET     -    26 ms - <default>  - 200 - /stats?noCache=-2004541865;
+2012-01-03 13:59:42.7022;Raven.Database.Server.HttpServer;Debug;Request # 277: GET     -    37 ms - <default>  - 200 - /stats?noCache=-1285348727;
+2012-01-03 13:59:48.7028;Raven.Database.Server.HttpServer;Debug;Request # 278: GET     -    76 ms - <default>  - 200 - /stats?noCache=-1806695317;
+2012-01-03 13:59:56.1546;Raven.Database.Server.HttpServer;Debug;Request # 279: GET     -    34 ms - <default>  - 200 - /stats?noCache=-339940523;
+2012-01-03 14:00:03.8804;Raven.Database.Server.HttpServer;Debug;Request # 280: GET     -    30 ms - <default>  - 200 - /stats?noCache=-2077800156;
+2012-01-03 14:00:18.9009;Raven.Database.Server.HttpServer;Debug;Request # 281: GET     -    26 ms - <default>  - 200 - /stats?noCache=67677266;
+2012-01-03 14:00:44.0464;Raven.Database.Server.HttpServer;Debug;Request # 282: GET     -    26 ms - <default>  - 200 - /stats?noCache=-461109905;
+2012-01-03 14:00:59.0679;Raven.Database.Server.HttpServer;Debug;Request # 283: GET     -    27 ms - <default>  - 200 - /stats?noCache=-1749330503;
+2012-01-03 14:01:04.0764;Raven.Database.Server.HttpServer;Debug;Request # 284: GET     -    29 ms - <default>  - 200 - /stats?noCache=2041116194;
+2012-01-03 14:01:39.2429;Raven.Database.Server.HttpServer;Debug;Request # 285: GET     -    33 ms - <default>  - 200 - /stats?noCache=214057408;
+2012-01-03 14:02:34.3424;Raven.Database.Server.HttpServer;Debug;Request # 286: GET     -    42 ms - <default>  - 200 - /stats?noCache=-329345629;
+2012-01-03 14:02:54.4424;Raven.Database.Server.HttpServer;Debug;Request # 287: GET     -    35 ms - <default>  - 200 - /stats?noCache=1820492570;
+2012-01-03 14:03:04.4974;Raven.Database.Server.HttpServer;Debug;Request # 288: GET     -    38 ms - <default>  - 200 - /stats?noCache=-678762555;
+2012-01-03 14:03:39.7560;Raven.Database.Server.HttpServer;Debug;Request # 289: GET     -    52 ms - <default>  - 200 - /stats?noCache=-1481471078;
+2012-01-03 14:04:19.8500;Raven.Database.Server.HttpServer;Debug;Request # 290: GET     -    47 ms - <default>  - 200 - /stats?noCache=2008597760;
+2012-01-03 14:04:44.9545;Raven.Database.Server.HttpServer;Debug;Request # 291: GET     -    66 ms - <default>  - 200 - /stats?noCache=1794998090;
+2012-01-03 14:04:49.9710;Raven.Database.Server.HttpServer;Debug;Request # 292: GET     -    70 ms - <default>  - 200 - /stats?noCache=-616617577;
+2012-01-03 14:06:20.1960;Raven.Database.Server.HttpServer;Debug;Request # 293: GET     -    26 ms - <default>  - 200 - /stats?noCache=873729483;
+2012-01-03 14:07:20.3360;Raven.Database.Server.HttpServer;Debug;Request # 294: GET     -    26 ms - <default>  - 200 - /stats?noCache=-229052036;
+2012-01-03 14:10:55.9546;Raven.Database.Server.HttpServer;Debug;Request # 295: GET     -    26 ms - <default>  - 200 - /stats?noCache=1903614614;
+2012-01-03 14:11:00.9711;Raven.Database.Server.HttpServer;Debug;Request # 296: GET     -    35 ms - <default>  - 200 - /stats?noCache=431506010;
+2012-01-03 14:11:06.7166;Raven.Database.Server.HttpServer;Debug;Request # 297: GET     -   543 ms - <default>  - 200 - /stats?noCache=-1744832713;
+2012-01-03 14:11:11.0861;Raven.Database.Server.HttpServer;Debug;Request # 298: GET     -    45 ms - <default>  - 200 - /stats?noCache=-1530548622;
+2012-01-03 14:14:26.6906;Raven.Database.Server.HttpServer;Debug;Request # 299: GET     -    32 ms - <default>  - 200 - /stats?noCache=-2079755580;
+2012-01-03 14:14:46.8707;Raven.Database.Server.HttpServer;Debug;Request # 300: GET     -   182 ms - <default>  - 200 - /stats?noCache=-1251818220;
+2012-01-03 14:16:11.8552;Raven.Database.Server.HttpServer;Debug;Request # 301: GET     -    31 ms - <default>  - 200 - /stats?noCache=-1179128933;
+2012-01-03 14:16:41.9742;Raven.Database.Server.HttpServer;Debug;Request # 302: GET     -    42 ms - <default>  - 200 - /stats?noCache=1825643012;
+2012-01-03 14:17:07.0217;Raven.Database.Server.HttpServer;Debug;Request # 303: GET     -    47 ms - <default>  - 200 - /stats?noCache=212363718;
+2012-01-03 14:17:27.0307;Raven.Database.Server.HttpServer;Debug;Request # 304: GET     -    29 ms - <default>  - 200 - /stats?noCache=-1797040550;
+2012-01-03 14:17:32.2622;Raven.Database.Server.HttpServer;Debug;Request # 305: GET     -   252 ms - <default>  - 200 - /stats?noCache=-1792688537;
+2012-01-03 14:18:27.1747;Raven.Database.Server.HttpServer;Debug;Request # 306: GET     -    42 ms - <default>  - 200 - /stats?noCache=1920899892;
+2012-01-03 14:21:07.4817;Raven.Database.Server.HttpServer;Debug;Request # 307: GET     -    26 ms - <default>  - 200 - /stats?noCache=-1876491412;
+2012-01-03 14:24:37.9588;Raven.Database.Server.HttpServer;Debug;Request # 308: GET     -    33 ms - <default>  - 200 - /stats?noCache=367064999;
+2012-01-03 14:25:18.0168;Raven.Database.Server.HttpServer;Debug;Request # 309: GET     -    28 ms - <default>  - 200 - /stats?noCache=1703572968;
+2012-01-03 14:25:28.1748;Raven.Database.Server.HttpServer;Debug;Request # 310: GET     -   169 ms - <default>  - 200 - /stats?noCache=648341056;
+2012-01-03 14:27:58.4118;Raven.Database.Server.HttpServer;Debug;Request # 311: GET     -    27 ms - <default>  - 200 - /stats?noCache=-1196505012;
+2012-01-03 14:28:38.5798;Raven.Database.Server.HttpServer;Debug;Request # 312: GET     -    27 ms - <default>  - 200 - /stats?noCache=1908817631;
+2012-01-03 14:33:54.3734;Raven.Database.Server.HttpServer;Debug;Request # 313: GET     -    26 ms - <default>  - 200 - /stats?noCache=-1290285184;
+2012-01-03 14:36:44.8964;Raven.Database.Server.HttpServer;Debug;Request # 314: GET     -    53 ms - <default>  - 200 - /stats?noCache=1350499684;
+2012-01-03 14:36:49.8909;Raven.Database.Server.HttpServer;Debug;Request # 315: GET     -    39 ms - <default>  - 200 - /stats?noCache=137820347;
+2012-01-03 14:36:54.9174;Raven.Database.Server.HttpServer;Debug;Request # 316: GET     -    58 ms - <default>  - 200 - /stats?noCache=-1087419991;
+2012-01-03 14:36:59.8979;Raven.Database.Server.HttpServer;Debug;Request # 317: GET     -    28 ms - <default>  - 200 - /stats?noCache=185106067;
+2012-01-03 14:37:09.9269;Raven.Database.Server.HttpServer;Debug;Request # 318: GET     -    44 ms - <default>  - 200 - /stats?noCache=1582546223;
+2012-01-03 14:37:14.9735;Raven.Database.Server.HttpServer;Debug;Request # 319: GET     -    82 ms - <default>  - 200 - /stats?noCache=140063900;
+2012-01-03 14:37:30.0390;Raven.Database.Server.HttpServer;Debug;Request # 320: GET     -    45 ms - <default>  - 200 - /stats?noCache=-1636402521;
+2012-01-03 14:37:50.0520;Raven.Database.Server.HttpServer;Debug;Request # 321: GET     -    26 ms - <default>  - 200 - /stats?noCache=-1190919243;
+2012-01-03 14:38:20.1310;Raven.Database.Server.HttpServer;Debug;Request # 322: GET     -    58 ms - <default>  - 200 - /stats?noCache=2110350672;
+2012-01-03 14:40:05.3595;Raven.Database.Server.HttpServer;Debug;Request # 323: GET     -    27 ms - <default>  - 200 - /stats?noCache=381887400;
+2012-01-03 14:40:25.4595;Raven.Database.Server.HttpServer;Debug;Request # 324: GET     -    36 ms - <default>  - 200 - /stats?noCache=-1472699014;
+2012-01-03 14:41:05.5685;Raven.Database.Server.HttpServer;Debug;Request # 325: GET     -    59 ms - <default>  - 200 - /stats?noCache=1811968314;
+2012-01-03 14:42:55.8615;Raven.Database.Server.HttpServer;Debug;Request # 326: GET     -    26 ms - <default>  - 200 - /stats?noCache=996856022;
+2012-01-03 14:43:00.8700;Raven.Database.Server.HttpServer;Debug;Request # 327: GET     -    29 ms - <default>  - 200 - /stats?noCache=-1138341434;

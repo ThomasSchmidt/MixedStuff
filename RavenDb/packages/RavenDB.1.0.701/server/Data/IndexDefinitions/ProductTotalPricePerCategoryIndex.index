@@ -1,0 +1,18 @@
+{
+  "Name": "ProductTotalPricePerCategoryIndex",
+  "Map": "docs.Products\r\n\t.Select(p => new {CategoryId = p.CategoryId, Total = p.Price})",
+  "Maps": [
+    "docs.Products\r\n\t.Select(p => new {CategoryId = p.CategoryId, Total = p.Price})"
+  ],
+  "Reduce": "results\r\n\t.GroupBy(p => p.CategoryId)\r\n\t.Select(g => new {CategoryId = g.Key, Total = g.Sum(p => (System.Int32)(p.Total))})",
+  "TransformResults": null,
+  "IsMapReduce": true,
+  "IsCompiled": false,
+  "IsTemp": false,
+  "Stores": {},
+  "Indexes": {},
+  "SortOptions": {},
+  "Analyzers": {},
+  "Fields": [],
+  "Type": "MapReduce"
+}

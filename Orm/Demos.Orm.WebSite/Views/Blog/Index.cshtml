@@ -1,0 +1,27 @@
+﻿@model Demos.Orm.ViewModel.BlogPostListViewModel
+@using Demos.Orm.DomainModel
+
+@{
+	ViewBag.Title = "Index";
+}
+
+@functions{
+   public int CommentCount(IList<Comment> comments) {
+	   if (comments == null)
+		   return 0;
+	   return comments.Count;
+   }
+}
+
+<fieldset>
+	<legend>Blog entries</legend>
+	@foreach (var blogPost in Model.BlogPosts)
+	{
+		<h1>@blogPost.BlogSubject</h1> 
+		<p>@blogPost.BlogContent</p>
+		<p>Comments : @CommentCount(blogPost.Comments)</p>
+		@Html.ActionLink("Read", "Index", "BlogPost", new { id = blogPost.Id }, null);
+	}
+</fieldset>
+
+@Html.ActionLink("Back to index", "Index", "Home")

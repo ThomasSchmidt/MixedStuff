@@ -1,0 +1,21 @@
+{
+  "Name": "CategoryIndex",
+  "Map": "docs.Categories\r\n\t.Select(cat => new {Id = cat.__document_id, Description = cat.Description})",
+  "Maps": [
+    "docs.Categories\r\n\t.Select(cat => new {Id = cat.__document_id, Description = cat.Description})"
+  ],
+  "Reduce": null,
+  "TransformResults": null,
+  "IsMapReduce": false,
+  "IsCompiled": false,
+  "IsTemp": false,
+  "Stores": {},
+  "Indexes": {
+    "Id": "NotAnalyzed",
+    "Description": "Analyzed"
+  },
+  "SortOptions": {},
+  "Analyzers": {},
+  "Fields": [],
+  "Type": "Map"
+}

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<RavenDdDemo.Model.Product>
+
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Product List</h2>
+
+<table>
+	<tr>
+		<th>
+			Price
+		</th>
+		<th>
+			Description
+		</th>
+		<th></th>
+	</tr>
+
+	@foreach (var item in Model) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Price)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Description)
+			</td>
+			<td>
+				@Html.ActionLink("Details", "Get", new { id=item.Id })
+			</td>
+		</tr>
+	}
+</table>
+@Html.ActionLink("Back", "Index", "Home", null, null)
