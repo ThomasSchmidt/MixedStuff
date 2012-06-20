@@ -2,8 +2,6 @@ Different test projects
 
 RavenDb : a project that explores RavenDb
 
-AppFabric.Cache : a project that uses AppFabric distributed caching
-
 Orm : a project that tries to implement the Repository pattern against 3 different Orms/Datastores, one with NHibernate, one with Entity Framework and on talking to RavenDb directly
 
 Randomizer : A utility project that can create instances of classes and randomly fill them with data, mostly used for unit testing purposes
