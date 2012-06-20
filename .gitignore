@@ -1,21 +1,19 @@
-**/*.suo
-**/*.user
-bin
-obj
-_ReSharper*
-dist
-output
-build
-*.csproj.user
-*.resharper.user
-*.resharper
-*.suo
-*.cache
-*~
-*.swp
-TestResult.xml
-IndexDefinitions/
-Indexes/
-logs/
-system/
-temp/
+# **/*.suo
+# **/*.user
+# bin
+# obj
+# _ReSharper*
+# dist
+# output
+# build
+# *.csproj.user
+# *.resharper.user
+# *.resharper
+# *.suo
+# *.cache
+# TestResult.xml
+# IndexDefinitions/
+# Indexes/
+# logs/
+# system/
+# temp/
