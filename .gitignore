@@ -14,8 +14,8 @@ build
 *~
 *.swp
 TestResult.xml
-**RavenDB*/**/IndexDefinitions/**
-**RavenDB*/**/Indexes/**
-**RavenDB*/**/logs/**
-**RavenDB*/**/system/**
-**RavenDB*/**/temp/**
+IndexDefinitions/
+Indexes/
+logs/
+system/
+temp/
