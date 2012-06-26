@@ -9,6 +9,6 @@ namespace Demos.Orm.DomainModel
 		public virtual string Name { get; set; }
 		public virtual DateTime CreateDate { get; set; }
 		public virtual DateTime ModifyDate { get; set; }
-		public virtual IList<BlogPost> BlogPosts { get; set; }
+		public virtual ICollection<BlogPost> BlogPosts { get; set; }
 	}
 }

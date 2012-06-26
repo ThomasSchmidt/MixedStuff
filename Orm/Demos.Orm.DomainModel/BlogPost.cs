@@ -14,6 +14,6 @@ namespace Demos.Orm.DomainModel
 		public virtual string BlogContent { get; set; }
 		public virtual DateTime CreateDate { get; set; }
 		public virtual DateTime ModifyDate { get; set; }
-		public virtual IList<Comment> Comments { get; set; }
+		public virtual ICollection<Comment> Comments { get; set; }
 	}
 }

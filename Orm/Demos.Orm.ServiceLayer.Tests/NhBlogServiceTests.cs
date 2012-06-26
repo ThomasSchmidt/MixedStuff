@@ -6,25 +6,25 @@ using Demos.Orm.DomainModel;
 using Demos.Orm.Repository;
 using Demos.Orm.Repository.NHibernate;
 using Demos.Orm.ViewModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Ninject;
 
 namespace Demos.Orm.ServiceLayer.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class NhBlogServiceTests
 	{
 		private static IKernel _kernel;
 
-		[ClassInitialize]
-		public static void ClassInit(TestContext testContext)
+		public NhBlogServiceTests()
 		{
 			_kernel = new StandardKernel();
 			_kernel.Load(new NinjectModules());
+			_kernel.Load(new NhNinjectModule());
 			_kernel.Rebind<IBlogRepository>().To<NhBlogRepository>();
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetLatestBlogTest()
 		{
 			//arrange
@@ -38,7 +38,7 @@ namespace Demos.Orm.ServiceLayer.Tests
 			Assert.IsNotNull(result.Blog);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetLatestBlogWithBlogPostsTest()
 		{
 			//arrange
@@ -53,7 +53,7 @@ namespace Demos.Orm.ServiceLayer.Tests
 			Assert.IsNotNull(result.Blog.BlogPosts);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CanSaveOnlyBlogTest()
 		{
 			//arrange
@@ -68,7 +68,7 @@ namespace Demos.Orm.ServiceLayer.Tests
 			Assert.IsTrue(actual.Id > 0);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CanSaveBlogTest()
 		{
 			//arrange
@@ -80,19 +80,19 @@ namespace Demos.Orm.ServiceLayer.Tests
 				Name = "unit-test-blog",
 				BlogPosts = new List<BlogPost>
 				{
-					new BlogPost
-					{
-						BlogSubject	= "blog subject 1-1",
-						BlogContent = "blog content 1-1",
-						Comments = new List<Comment>
-						{
-							new Comment
-							{
-								CommentContent = "comment 1-1",
-								Username = "username 1-1"
-							}
-						}
-					},
+					//new BlogPost
+					//{
+					//    BlogSubject	= "blog subject 1-1",
+					//    BlogContent = "blog content 1-1",
+					//    Comments = new List<Comment>
+					//    {
+					//        new Comment
+					//        {
+					//            CommentContent = "comment 1-1",
+					//            Username = "username 1-1"
+					//        }
+					//    }
+					//},
 					new BlogPost
 					{
 						BlogSubject = "blog subject 1-2",

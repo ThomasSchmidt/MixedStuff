@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using Demos.Orm.Repository;
-//using Demos.Orm.Repository.EntityFramework;
-//using Demos.Orm.Repository.EntityFramework;
 using Demos.Orm.Repository.EntityFramework;
 using Demos.Orm.Repository.NHibernate;
 using Demos.Orm.Repository.RavenDb;
-using NHibernate;
 using Ninject.Modules;
 
 namespace Demos.Orm.ServiceLayer
@@ -17,7 +15,7 @@ namespace Demos.Orm.ServiceLayer
 	{
 		public override void Load()
 		{
-			Bind<IBlogService>().To<BlogService>().InRequestScope();
+			Bind<IBlogService>().To<BlogService>().InScope(context => HttpContext.Current);
 			
 			//to use Entity Framework
 			//Bind<IBlogRepository>().To<EfBlogRepository>().InRequestScope();
@@ -25,7 +23,7 @@ namespace Demos.Orm.ServiceLayer
 			//Bind<IBlogRepository>().To<NhBlogRepository>().InRequestScope();
 
 			//to use RavenDB
-			Bind<IBlogRepository>().To<RavenBlogRepository>().InRequestScope();
+			Bind<IBlogRepository>().To<RavenBlogRepository>().InScope(context => HttpContext.Current);
 		}
 	}
 }

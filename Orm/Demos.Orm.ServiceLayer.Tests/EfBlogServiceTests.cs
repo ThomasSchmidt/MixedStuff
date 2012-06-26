@@ -6,25 +6,24 @@ using Demos.Orm.DomainModel;
 using Demos.Orm.Repository;
 using Demos.Orm.Repository.EntityFramework;
 using Demos.Orm.ViewModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Ninject;
 
 namespace Demos.Orm.ServiceLayer.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class EfBlogServiceTests
 	{
 		private static IKernel _kernel;
 
-		[ClassInitialize]
-		public static void ClassInit(TestContext testContext)
+		public EfBlogServiceTests()
 		{
 			_kernel = new StandardKernel();
 			_kernel.Load(new NinjectModules());
 			_kernel.Rebind<IBlogRepository>().To<EfBlogRepository>();
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetLatestBlogTest()
 		{
 			//arrange
@@ -38,7 +37,7 @@ namespace Demos.Orm.ServiceLayer.Tests
 			Assert.IsNotNull(result.Blog);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetLatestBlogWithBlogPostsTest()
 		{
 			//arrange
@@ -53,7 +52,7 @@ namespace Demos.Orm.ServiceLayer.Tests
 			Assert.IsNotNull(result.Blog.BlogPosts);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CanSaveBlogTest()
 		{
 			//arrange

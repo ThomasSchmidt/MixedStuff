@@ -4,15 +4,15 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Demos.Orm.ServiceLayer.Tests
 {
-	[TestClass]
+	[SetUpFixture]
 	public class AssemblyInit
 	{
-		[AssemblyInitialize]
-		public static void AssemblyInitialize(TestContext context)
+		[SetUp]
+		public void AssemblyInitialize()
 		{
 			Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
 

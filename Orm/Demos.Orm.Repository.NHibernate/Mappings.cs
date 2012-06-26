@@ -3,64 +3,118 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Demos.Orm.DomainModel;
-using FluentNHibernate.Mapping;
+using NHibernate.Mapping.ByCode;
+using NHibernate.Mapping.ByCode.Conformist;
 
 namespace Demos.Orm.Repository.NHibernate
 {
-	public class BlogMap : ClassMap<Blog>
+	public class BlogMap : ClassMapping<Blog>
 	{
 		public BlogMap()
 		{
 			Table("Blog");
-			Id(b => b.Id).Column("Id")
-				.Not.Nullable()
-				.GeneratedBy.Identity();
-			Map(b => b.Name).Column("Name").Length(255);
-			Map(b => b.CreateDate).Column("CreateDate").Generated.Insert();
-			Map(b => b.ModifyDate).Column("ModifyDate").Generated.Always();
+			Id(b => b.Id, m =>
+			{
+				m.Column("Id");
+				m.Generator(Generators.Identity);
+			});
+			Property(b => b.Name, m =>
+			{
+				m.Column("Name"); 
+				m.Length(255);
+			});
+			Property(b => b.CreateDate, m =>
+			{
+				m.Column("CreateDate");
+				m.Generated(PropertyGeneration.Insert);
+			});
+			Property(b => b.ModifyDate, m =>
+			{
+				m.Column("ModifyDate");
+				m.Generated(PropertyGeneration.Always);
+			});
 
-			HasMany(b => b.BlogPosts)
-				.KeyColumn("BlogId")
-				//.AsBag()
-				.Not.Inverse()
-				.Not.KeyNullable()
-				.Cascade.All();
+			Set(b => b.BlogPosts,
+			    m =>
+			    {
+					m.Table("BlogPosts");
+					m.Cascade(Cascade.All);
+					m.Inverse(false);
+					m.Key(k => k.Column("BlogId"));
+			    },
+			    rel =>
+			    {
+					rel.OneToMany(otm =>
+					{
+						otm.NotFound(NotFoundMode.Ignore);
+					});
+			    });
 		 }
 	}
 
-	public class BlogPostMap : ClassMap<BlogPost>
+	public class BlogPostMap : ClassMapping<BlogPost>
 	{
 		public BlogPostMap()
 		{
 			Table("BlogPost");
-			Id(bp => bp.Id).Column("Id")
-				.Not.Nullable()
-				.GeneratedBy.Identity();
-			Map(bp => bp.BlogSubject).Column("Subject");
-			Map(bp => bp.BlogContent).Column("Content");
-			Map(bp => bp.CreateDate).Column("CreateDate").Generated.Insert();
-			Map(bp => bp.ModifyDate).Column("ModifyDate").Generated.Always();
+			Id(bp => bp.Id, m =>
+			{
+				m.Column("Id");
+				m.Generator(Generators.Identity);
+			});
+			Property(bp => bp.BlogSubject, m => m.Column("Subject"));
+			Property(bp => bp.BlogContent, m => m.Column("Content"));
+			Property(bp => bp.CreateDate, m =>
+			{
+				m.Column("CreateDate");
+				m.Generated(PropertyGeneration.Insert);
+			});
+			Property(bp => bp.ModifyDate, m =>
+			{
+				m.Column("ModifyDate");
+				m.Generated(PropertyGeneration.Always);
+			});
 
-			HasMany(bp => bp.Comments)
-				.KeyColumn("BlogPostId")
-				.Not.Inverse()
-				.Not.KeyNullable()
-				.Cascade.All();
+			Set(b => b.Comments,
+				m =>
+				{
+					m.Table("Comments");
+					m.Cascade(Cascade.All);
+					m.Inverse(true);
+					m.Key(k => k.Column("BlogPostId"));
+				},
+				rel =>
+				{
+					rel.OneToMany(otm =>
+					{
+						otm.NotFound(NotFoundMode.Ignore);
+					});
+				});
 		}
 	}
 
-	public class CommentMap : ClassMap<Comment>
+	public class CommentMap : ClassMapping<Comment>
 	{
 		public CommentMap()
 		{
 			Table("Comment");
-			Id(c => c.Id).Column("Id")
-				.Not.Nullable()
-				.GeneratedBy.Identity();
-			Map(c => c.CommentContent).Column("CommentContent");
-			Map(c => c.Username).Column("Username");
-			Map(c => c.CreateDate).Column("CreateDate").Generated.Insert();
-			Map(c => c.ModifyDate).Column("ModifyDate").Generated.Always();
+			Id(c => c.Id, m =>
+			{
+				m.Column("Id");
+				m.Generator(Generators.Identity);
+			});
+			Property(c => c.CommentContent, m => m.Column("CommentContent"));
+			Property(c => c.Username, m => m.Column("Username"));
+			Property(c => c.CreateDate, m =>
+			{
+				m.Column("CreateDate");
+				m.Generated(PropertyGeneration.Insert);
+			});
+			Property(c => c.ModifyDate, m =>
+			{
+				m.Column("ModifyDate");
+				m.Generated(PropertyGeneration.Always);
+			});
 		}
 	}
 }

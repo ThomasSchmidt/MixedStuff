@@ -17,3 +17,9 @@
 # logs/
 # system/
 # temp/
+
+*.ReSharper.user
+bin/
+obj/
+*.suo
+packages/
