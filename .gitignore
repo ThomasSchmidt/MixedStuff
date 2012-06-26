@@ -1,25 +1,18 @@
-# **/*.suo
-# **/*.user
-# bin
-# obj
-# _ReSharper*
-# dist
-# output
-# build
-# *.csproj.user
-# *.resharper.user
-# *.resharper
-# *.suo
-# *.cache
-# TestResult.xml
-# IndexDefinitions/
-# Indexes/
-# logs/
-# system/
-# temp/
+# OS junk files
+[Tt]humbs.db
+*.DS_Store
 
-*.ReSharper.user
-bin/
-obj/
+# visual studio files
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
 *.suo
+*.user
+
+# Tooling
+_ReSharper*/
+*.resharper
+[Tt]est[Rr]esult*
+
+# nuget packages
 packages/
