@@ -32,12 +32,60 @@ namespace RavenDbProviders.MembershipProvider.Tests
 		[Test]
 		public void CanCreateUser()
 		{
-			//arrange+act
+			//arrange
 			string username = "unit-test-" + Guid.NewGuid();
-			MembershipUser actual = Membership.CreateUser(username, "password");
+			MembershipUser created = Membership.CreateUser(username, "password", "thomas.schmidt@valtech.dk");
+
+			//act
+			MembershipUser actual = Membership.GetUser(username);
 
 			//assert
-			Assert.That(actual.UserName, Is.EqualTo(username));
+			Assert.That(actual.UserName, Is.EqualTo(created.UserName));
+
+			Membership.DeleteUser(username);
+		}
+
+		[Test]
+		public void CanDeleteUser()
+		{
+			//arrange
+			string username = "unit-test-" + Guid.NewGuid();
+			MembershipUser created = Membership.CreateUser(username, "password", "thomas.schmidt@valtech.dk");
+
+			//act
+			bool actual = Membership.DeleteUser(username);
+
+			//assert
+			Assert.That(Membership.GetUser(username), Is.Null);
+		}
+
+		[Test]
+		public void CanChangePasswordQuestionAndAnswer()
+		{
+			//arrange
+			string username = "unit-test-" + Guid.NewGuid();
+			MembershipUser created = Membership.CreateUser(username, "password", "thomas.schmidt@valtech.dk");
+			RavenDbMembershipProvider provider = new RavenDbMembershipProvider();
+
+			//act
+			bool actual = provider.ChangePasswordQuestionAndAnswer(username, "password", "new question", "new answer");
+
+			//assert
+			Assert.IsTrue(actual);
+		}
+
+		[Test]
+		public void PasswordHashShouldNotChangeAfterBeingStoredInRavenDb()
+		{
+			//arrange
+			string username = "unit-test-" + Guid.NewGuid();
+			MembershipUser created = Membership.CreateUser(username, "password", "thomas.schmidt@valtech.dk");
+
+			//act
+			bool actual = Membership.ValidateUser(username, "password");
+
+			//assert
+			Assert.IsTrue(actual);
 		}
 	}
 }

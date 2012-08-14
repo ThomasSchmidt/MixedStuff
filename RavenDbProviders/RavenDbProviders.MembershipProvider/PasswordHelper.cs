@@ -5,16 +5,16 @@ namespace RavenDbProviders.MembershipProvider
 {
 	internal static class PasswordHelper
 	{
-		internal static string CreateSalt(int size)
+		internal static byte[] CreateSalt(int size)
 		{
 			//Generate a cryptographic random number.
 			using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
 			{
 				byte[] buff = new byte[size];
 				rng.GetBytes(buff);
-
+				return buff;
 				// Return a Base64 string representation of the random number.
-				return Convert.ToBase64String(buff);
+				//return Convert.ToBase64String(buff);
 			}
 		}
 
@@ -35,6 +35,15 @@ namespace RavenDbProviders.MembershipProvider
 
 				return algorithm.ComputeHash(plainTextWithSaltBytes);
 			}
+		}
+
+		internal static bool ValidatePassword(User user, string password)
+		{
+			if (user == null || string.IsNullOrWhiteSpace(password))
+				return false;
+
+			byte[] providedPasswordHash = GenerateSaltedHash(System.Text.Encoding.UTF8.GetBytes(password), user.PasswordHash);
+			return providedPasswordHash == user.PasswordHash;
 		}
 	}
 }
