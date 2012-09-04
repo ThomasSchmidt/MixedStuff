@@ -12,15 +12,13 @@ namespace RavenDbProviders.MembershipProvider
 		{
 			return new User
 			{
-				UserName = membershipUser.UserName,
+				Username = membershipUser.UserName,
 				Email = membershipUser.Email,
 				PasswordQuestion = membershipUser.PasswordQuestion,
-				PasswordAnswer = "",
 				IsApproved = membershipUser.IsApproved,
 				IsLockedOut = membershipUser.IsLockedOut,
 				Comment = membershipUser.Comment,
 				CreationDate = membershipUser.CreationDate,
-				IsOnline = membershipUser.IsOnline,
 				LastActivityDate = membershipUser.LastActivityDate,
 				LastLockoutDate = membershipUser.LastLockoutDate,
 				LastLoginDate = membershipUser.LastLoginDate,
@@ -32,7 +30,19 @@ namespace RavenDbProviders.MembershipProvider
 
 		public static MembershipUser ToMembershipUser(this User user)
 		{
-			return new MembershipUser(RavenDbMembershipProvider.PROVIDER_NAME, user.UserName, user.ProviderUserKey, user.Email, user.PasswordQuestion, user.Comment, user.IsApproved, user.IsLockedOut, user.CreationDate, user.LastLoginDate, user.LastActivityDate, user.LastPasswordChangedDate, user.LastLockoutDate);
+			return new MembershipUser(RavenDbMembershipProvider.ProviderName, user.Username, user.ProviderUserKey, user.Email, user.PasswordQuestion, user.Comment, user.IsApproved, user.IsLockedOut, user.CreationDate, user.LastLoginDate, user.LastActivityDate, user.LastPasswordChangedDate, user.LastLockoutDate);
+		}
+
+		public static MembershipUserCollection ToMembershipUserCollection(this IEnumerable<User> users)
+		{
+			MembershipUserCollection membershipUsers = new MembershipUserCollection();
+
+			foreach (User user in users)
+			{
+				membershipUsers.Add(user.ToMembershipUser());
+			}
+
+			return membershipUsers;
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace RavenDbProviders.MembershipProvider
@@ -16,6 +17,11 @@ namespace RavenDbProviders.MembershipProvider
 				// Return a Base64 string representation of the random number.
 				//return Convert.ToBase64String(buff);
 			}
+		}
+
+		internal static byte[] GenerateSaltedHash(string plainText, byte[] salt)
+		{
+			return GenerateSaltedHash(System.Text.Encoding.UTF8.GetBytes(plainText), salt);
 		}
 
 		internal static byte[] GenerateSaltedHash(byte[] plainText, byte[] salt)
@@ -42,8 +48,17 @@ namespace RavenDbProviders.MembershipProvider
 			if (user == null || string.IsNullOrWhiteSpace(password))
 				return false;
 
-			byte[] providedPasswordHash = GenerateSaltedHash(System.Text.Encoding.UTF8.GetBytes(password), user.PasswordHash);
-			return providedPasswordHash == user.PasswordHash;
+			byte[] checkHash = GenerateSaltedHash(password, user.Salt);
+			return checkHash.SequenceEqual(user.Password);
+		}
+
+		internal static bool ValidateAnswer(User user, string answer)
+		{
+			if (user == null || string.IsNullOrWhiteSpace(answer))
+				return false;
+
+			byte[] checkHash = GenerateSaltedHash(answer, user.Salt);
+			return checkHash.SequenceEqual(user.PasswordAnswer);
 		}
 	}
 }

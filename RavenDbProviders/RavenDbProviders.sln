@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RavenDbMembershipProvider", "RavenDbMembershipProvider", "{33813D13-3391-417A-A514-1795276026ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDbProviders.MembershipProvider", "RavenDbProviders.MembershipProvider\RavenDbProviders.MembershipProvider.csproj", "{DABB9E43-9352-407A-AB2C-271B14C78D01}"
@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9DC70C
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDbProviders.RoleProvider", "RavenDbProviders.RoleProvider\RavenDbProviders.RoleProvider.csproj", "{9FFA669F-9E7F-428F-9AF6-7E867CCF50AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDbProviders.RoleProvider.Tests", "RavenDbProviders.RoleProvider.Tests\RavenDbProviders.RoleProvider.Tests.csproj", "{F22D70F0-BFF4-4D33-ABF9-4FB911345C80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +34,14 @@ Global
 		{F6DA3858-6C75-4D65-A795-441CE3488CAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6DA3858-6C75-4D65-A795-441CE3488CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6DA3858-6C75-4D65-A795-441CE3488CAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FFA669F-9E7F-428F-9AF6-7E867CCF50AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FFA669F-9E7F-428F-9AF6-7E867CCF50AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FFA669F-9E7F-428F-9AF6-7E867CCF50AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FFA669F-9E7F-428F-9AF6-7E867CCF50AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F22D70F0-BFF4-4D33-ABF9-4FB911345C80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F22D70F0-BFF4-4D33-ABF9-4FB911345C80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F22D70F0-BFF4-4D33-ABF9-4FB911345C80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F22D70F0-BFF4-4D33-ABF9-4FB911345C80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,6 +49,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DABB9E43-9352-407A-AB2C-271B14C78D01} = {33813D13-3391-417A-A514-1795276026ED}
 		{2E7C685F-68D8-4588-9864-09F4C88F6B33} = {33813D13-3391-417A-A514-1795276026ED}
+		{9FFA669F-9E7F-428F-9AF6-7E867CCF50AE} = {33813D13-3391-417A-A514-1795276026ED}
 		{F6DA3858-6C75-4D65-A795-441CE3488CAB} = {2E7C685F-68D8-4588-9864-09F4C88F6B33}
+		{F22D70F0-BFF4-4D33-ABF9-4FB911345C80} = {2E7C685F-68D8-4588-9864-09F4C88F6B33}
 	EndGlobalSection
 EndGlobal
