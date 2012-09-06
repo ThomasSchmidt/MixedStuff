@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration.Provider;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Transactions;
 using Raven.Client;
@@ -63,7 +65,17 @@ namespace RavenDbProviders.RoleProvider
 
 	    public override string[] GetRolesForUser(string username)
 	    {
-		    throw new NotImplementedException();
+			if ( string.IsNullOrWhiteSpace(username))
+				return new string[]{};
+
+		    using(IDocumentSession session = _store.OpenSession())
+		    {
+			    return session.Query<Role>()
+					.Customize(c => c.WaitForNonStaleResultsAsOfNow())
+				    .Where(r => r.Members.Any(rm => rm == username))
+				    .Select(r => r.RoleName)
+				    .ToArray();
+		    }
 	    }
 
 	    public override void CreateRole(string roleName)
@@ -118,12 +130,30 @@ namespace RavenDbProviders.RoleProvider
 
 	    public override void AddUsersToRoles(string[] usernames, string[] roleNames)
 	    {
-		    using(IDocumentSession session = _store.OpenSession())
-		    {
-			    IList<Role> roles = session.Query<Role>()
+			ModifyUsersInRoles(usernames, roleNames, true);
+	    }
+
+	    public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
+	    {
+			ModifyUsersInRoles(usernames, roleNames, false);
+	    }
+
+		private void ModifyUsersInRoles(string[] usernames, string[] roleNames, bool addToRoles)
+		{
+			if (usernames == null || roleNames == null || usernames.Length == 0 || roleNames.Length == 0)
+				return;
+
+			using (IDocumentSession session = _store.OpenSession())
+			{
+				Expression<Func<Role, bool>> roleNameWhere = PredicateBuilder.False<Role>();
+				roleNames.ToList().ForEach(currentRoleName =>
+				{
+					roleNameWhere = roleNameWhere.Or(r => r.RoleName.Equals(currentRoleName, StringComparison.OrdinalIgnoreCase));
+				});
+				IList<Role> roles = session.Query<Role>()
 					.Customize(c => c.WaitForNonStaleResultsAsOfNow())
-				    .Where(r => roleNames.Any(rn => rn == r.RoleName))
-				    .ToList();
+					.Where(roleNameWhere.Compile())
+					.ToList();
 
 				using (TransactionScope scope = new TransactionScope())
 				{
@@ -131,46 +161,62 @@ namespace RavenDbProviders.RoleProvider
 					{
 						foreach (string username in usernames)
 						{
-							if (!role.Members.Contains(username))
-								role.Members.Add(username);
+							if ( addToRoles )
+							{
+								if ( !role.Members.Contains(username))	
+									role.Members.Add(username);
+							}
+							else
+							{
+								if (role.Members.Contains(username))
+									role.Members.Remove(username);
+							}
 						}
 						session.Store(role);
 						session.SaveChanges();
 					}
 					scope.Complete();
 				}
-
-		    }
-	    }
-
-	    public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
-	    {
-		    throw new NotImplementedException();
-	    }
+			}
+		}
 
 	    public override string[] GetUsersInRole(string roleName)
 	    {
-		    throw new NotImplementedException();
+		    using(IDocumentSession session = _store.OpenSession())
+		    {
+			    Role role = session.Query<Role>().FirstOrDefault(r => r.RoleName.Equals(roleName, StringComparison.OrdinalIgnoreCase));
+				return role == null ? new string[]{} : role.Members.ToArray();
+		    }
 	    }
 
 	    public override string[] GetAllRoles()
 	    {
 		    using(IDocumentSession session = _store.OpenSession())
 		    {
-			    return session.Query<Role>().Select(r => r.RoleName).ToArray();
+			    return session.Query<Role>().Customize(c => c.WaitForNonStaleResultsAsOfNow()).Select(r => r.RoleName).ToArray();
 		    }
 	    }
 
 	    public override string[] FindUsersInRole(string roleName, string usernameToMatch)
 	    {
-		    throw new NotImplementedException();
+		    if ( string.IsNullOrWhiteSpace(roleName) || string.IsNullOrWhiteSpace(usernameToMatch))
+				return new string[]{};
+
+			using(IDocumentSession session = _store.OpenSession())
+			{
+				Role role = session.Query<Role>().FirstOrDefault(r => r.RoleName.Equals(roleName, StringComparison.OrdinalIgnoreCase));
+				if ( role == null)
+					return new string[]{};
+
+				return role.Members.Where(rm => rm.StartsWith(usernameToMatch)).ToArray();
+			}
 	    }
 
 	    public override string ApplicationName { get; set; }
 
 		private Role GetRavenRole(IDocumentSession session, string roleName)
 		{
-			return session.Query<Role>().FirstOrDefault(r => r.RoleName.Equals(roleName, StringComparison.OrdinalIgnoreCase));
+			return session.Query<Role>().Customize(c => c.WaitForNonStaleResultsAsOfNow()) .FirstOrDefault(r => r.RoleName.Equals(roleName, StringComparison.OrdinalIgnoreCase));
 		}
     }
 }
