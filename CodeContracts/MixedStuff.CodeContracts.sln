@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixedStuff.CodeContracts", "MixedStuff.CodeContracts.csproj", "{8199A8CE-6496-4969-865C-C45C120FB0E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixedStuff.CodeContracts.Tests", "..\MixedStuff.CodeContracts.Tests\MixedStuff.CodeContracts.Tests.csproj", "{2FEBD351-05B4-41DE-BA89-4D5B0742EFF3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8199A8CE-6496-4969-865C-C45C120FB0E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8199A8CE-6496-4969-865C-C45C120FB0E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8199A8CE-6496-4969-865C-C45C120FB0E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8199A8CE-6496-4969-865C-C45C120FB0E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FEBD351-05B4-41DE-BA89-4D5B0742EFF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FEBD351-05B4-41DE-BA89-4D5B0742EFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FEBD351-05B4-41DE-BA89-4D5B0742EFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FEBD351-05B4-41DE-BA89-4D5B0742EFF3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

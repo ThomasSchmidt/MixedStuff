@@ -1,0 +1,22 @@
+﻿@model MvcWebRole1.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<fieldset>
+    <legend>HomeViewModel</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PageName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PageName)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
