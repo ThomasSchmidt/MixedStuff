@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
+using System.Collections.Generic;
 using System.IO;
+using System.Security.Principal;
+using System.Threading;
 using System.Web.Security;
 using System.Linq;
 using System.Xml.Linq;
@@ -12,18 +13,53 @@ namespace RavenDbProviders.MembershipProvider.Tests
 	[TestFixture]
 	public class RavenDbMembershipProviderTests
 	{
+		private const string TEST_EMAIL = "test@test.com";
+		private const string TEST_PASSWORD = "password";
+
+		public static IList<MembershipUser> CreateUsers(int count, string email = TEST_EMAIL, string password = TEST_PASSWORD)
+		{
+			List<MembershipUser> users = new List<MembershipUser>();
+
+			for (int i = 0; i < count; i++)
+			{
+				MembershipUser user = Membership.CreateUser("unit-test-" + Guid.NewGuid().ToString(), password, email);
+				users.Add(user);
+			}
+
+			return users;
+		}
+
+		public static void DeleteUsers(IList<MembershipUser> users)
+		{
+			foreach (MembershipUser membershipUser in users)
+			{
+				Membership.DeleteUser(membershipUser.UserName);
+			}
+		}
+
+		[SetUp]
+		public void SetUp()
+		{
+			int totalRecords;
+			MembershipUserCollection users = Membership.GetAllUsers(0, 1000, out totalRecords);
+			foreach (MembershipUser user in users)
+			{
+				Membership.DeleteUser(user.UserName);
+			}
+		}
+
 		[Test]
 		public void ApplicationNameMatchesConfigSetting()
 		{
 			//arrange
 			string configPath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase + ".config").LocalPath;
-			XDocument appConfig = null;
+			XDocument appConfig;
 			using (FileStream fs = new FileStream(configPath, FileMode.Open, FileAccess.Read))
 			{
 				appConfig = XDocument.Load(fs);
 				fs.Close();
 			}
-			string appName = appConfig.Descendants().Where(x => x.Name == "providers").First().Element("add").Attribute("applicationName").Value;
+			string appName = appConfig.Descendants().First(x => x.Name == "providers").Element("add").Attribute("applicationName").Value;
 
 			//act+assert
 			Assert.That(Membership.ApplicationName, Is.EqualTo(appName));
@@ -33,59 +69,300 @@ namespace RavenDbProviders.MembershipProvider.Tests
 		public void CanCreateUser()
 		{
 			//arrange
-			string username = "unit-test-" + Guid.NewGuid();
-			MembershipUser created = Membership.CreateUser(username, "password", "thomas.schmidt@valtech.dk");
+			var created = CreateUsers(1);
 
 			//act
-			MembershipUser actual = Membership.GetUser(username);
+			MembershipUser actual = Membership.GetUser(created.First().UserName);
 
 			//assert
-			Assert.That(actual.UserName, Is.EqualTo(created.UserName));
-
-			Membership.DeleteUser(username);
+			Assert.That(actual.UserName, Is.EqualTo(created.First().UserName));
 		}
 
 		[Test]
 		public void CanDeleteUser()
 		{
 			//arrange
-			string username = "unit-test-" + Guid.NewGuid();
-			MembershipUser created = Membership.CreateUser(username, "password", "thomas.schmidt@valtech.dk");
-
+			var created = CreateUsers(1);
 			//act
-			bool actual = Membership.DeleteUser(username);
+			bool actual = Membership.DeleteUser(created.First().UserName);
 
 			//assert
-			Assert.That(Membership.GetUser(username), Is.Null);
+			Assert.That(Membership.GetUser(created.First().UserName), Is.Null);
+		}
+
+		[Test]
+		public void CanGetUserWithOverload1()
+		{
+			//arrange
+			var created = CreateUsers(1);
+			//fake currentprincipal
+			Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(created.First().UserName), new string[] {"Admin"});
+
+			//act
+			MembershipUser actual = Membership.GetUser();
+
+			//assert
+			Assert.That(actual, Is.Not.Null);
+		}
+
+		[Test]
+		public void CanGetUserWithOverload2()
+		{
+			//arrange
+			var created = CreateUsers(1);
+			//fake currentprincipal
+			Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(created.First().UserName), new string[] {"Admin"});
+
+			//act
+			MembershipUser actual = Membership.GetUser(true);
+
+			//assert
+			Assert.That(actual, Is.Not.Null);
+			Assert.That(actual.IsOnline, Is.True);
 		}
 
 		[Test]
 		public void CanChangePasswordQuestionAndAnswer()
 		{
 			//arrange
-			string username = "unit-test-" + Guid.NewGuid();
-			MembershipUser created = Membership.CreateUser(username, "password", "thomas.schmidt@valtech.dk");
+			var created = CreateUsers(1);
 			RavenDbMembershipProvider provider = new RavenDbMembershipProvider();
 
 			//act
-			bool actual = provider.ChangePasswordQuestionAndAnswer(username, "password", "new question", "new answer");
+			bool actual = provider.ChangePasswordQuestionAndAnswer(created.First().UserName, TEST_PASSWORD, "new question", "new answer");
 
 			//assert
 			Assert.IsTrue(actual);
 		}
 
 		[Test]
+		public void CanChangePassword()
+		{
+			//arrange
+			var created = CreateUsers(1);
+			RavenDbMembershipProvider provider = (RavenDbMembershipProvider)Membership.Provider;
+
+			//act
+			provider.ChangePassword(created.First().UserName, TEST_PASSWORD, "newpassword");
+
+			//assert
+			bool oldPasswordCanValidate = Membership.ValidateUser(created.First().UserName, TEST_PASSWORD);
+			Assert.IsFalse(oldPasswordCanValidate);
+
+			bool newPasswordCanValidate = Membership.ValidateUser(created.First().UserName, "newpassword");
+			Assert.IsTrue(newPasswordCanValidate);
+		}
+
+		[Test]
+		public void CanResetPassword()
+		{
+			//arrange
+			var created = CreateUsers(1);
+			RavenDbMembershipProvider provider = (RavenDbMembershipProvider)Membership.Provider;
+
+			provider.ChangePasswordQuestionAndAnswer(created.First().UserName, TEST_PASSWORD, "questionwashere", "answerwashere");
+
+			//act
+			string actual = provider.ResetPassword(created.First().UserName, "answerwashere");
+
+			Assert.IsNotNullOrEmpty(actual);
+			//assert that the user can validate with the newly provided autogenerated password
+			Assert.IsTrue(provider.ValidateUser(created.First().UserName, actual));
+		}
+
+		[Test]
 		public void PasswordHashShouldNotChangeAfterBeingStoredInRavenDb()
 		{
 			//arrange
-			string username = "unit-test-" + Guid.NewGuid();
-			MembershipUser created = Membership.CreateUser(username, "password", "thomas.schmidt@valtech.dk");
+			var created = CreateUsers(1);
 
 			//act
-			bool actual = Membership.ValidateUser(username, "password");
+			bool actual = Membership.ValidateUser(created.First().UserName, TEST_PASSWORD);
 
 			//assert
 			Assert.IsTrue(actual);
+		}
+
+		[Test]
+		public void LongAndComplexPasswordShouldWorkWhenStoredInRavenDb()
+		{
+			//arrange
+			const string password = "123456789!\"#¤%&/()Ø*^ø'¨¨";
+			var created = CreateUsers(1, password: password);
+
+			//act
+			bool actual = Membership.ValidateUser(created.First().UserName, password);
+
+			//assert
+			Assert.IsTrue(actual);
+		}
+
+		[Test]
+		public void GetAllUsersTestWithNoSpecificPageIndexOrPageSizeGiven()
+		{
+			//arrange
+			var created = CreateUsers(2);
+
+			//act
+			MembershipUserCollection actual = Membership.GetAllUsers();
+
+			//assert
+			Assert.That(actual, Is.Not.Null);
+			Assert.That(actual.Count, Is.AtLeast(2));
+		}
+
+		[Test]
+		public void GetAllUsersTestWithSpecificPageIndexOrPageSizeThatShouldBeInRange()
+		{
+			//arrange
+			var created = CreateUsers(2);
+
+			//act
+			int totalRecords;
+			MembershipUserCollection actual = Membership.GetAllUsers(0, 5, out totalRecords);
+
+			//assert
+			Assert.That(actual, Is.Not.Null);
+			Assert.That(actual.Count, Is.AtLeast(2));
+			Assert.That(totalRecords, Is.AtLeast(2));
+		}
+
+		[Test]
+		public void GetAllUsersTestWithSpecificPageIndexOrPageSizeThatIsOutOfRange()
+		{
+			//arrange
+			var created = CreateUsers(2);
+
+			//act
+			int totalRecords;
+			MembershipUserCollection actual = Membership.GetAllUsers(100, 5, out totalRecords);
+
+			//assert
+			Assert.That(actual, Is.Not.Null);
+			Assert.That(actual.Count, Is.EqualTo(0));
+			Assert.That(totalRecords, Is.AtLeast(2));
+		}
+
+		[Test]
+		public void GetCountOfOnlineUsers()
+		{
+			//arrange
+			var created = CreateUsers(2);
+			Membership.GetUser(created.First().UserName, true); //set online for username1
+
+			//act
+			int actual = Membership.GetNumberOfUsersOnline();
+
+			//assert
+			Assert.That(actual, Is.AtLeast(1));
+		}
+
+		[Test]
+		public void CanFindUsersByUsernameWithNoRangesSpecified()
+		{
+			//arrange
+			var created = CreateUsers(2);
+
+			//act
+			MembershipUserCollection actual = Membership.FindUsersByName("unit-test");
+
+			//assert
+			Assert.That(actual.Count, Is.AtLeast(2));
+		}
+
+		[Test]
+		public void CanFindUsersByUsernameWithRangesSpecified()
+		{
+			//arrange
+			var created = CreateUsers(2);
+
+			//act
+			int totalRecords;
+			MembershipUserCollection actual = Membership.FindUsersByName("unit-test", 0, 5, out totalRecords);
+
+			//assert
+			Assert.That(actual.Count, Is.AtLeast(2));
+			Assert.That(totalRecords, Is.AtLeast(2));
+		}
+
+		[Test]
+		public void CanFindUsersByUsernameWithInvalidRangesSpecified()
+		{
+			//arrange
+			var created = CreateUsers(2);
+
+			//act
+			int totalRecords;
+			MembershipUserCollection actual = Membership.FindUsersByName("unit-test", 10, 5, out totalRecords);
+
+			//assert
+			Assert.That(actual.Count, Is.AtLeast(0));
+			Assert.That(totalRecords, Is.AtLeast(2));
+		}
+
+		[Test]
+		public void CanFindUsersByEmailWithNoRangesSpecified()
+		{
+			//arrange
+			var created = CreateUsers(2);
+
+			//act
+			MembershipUserCollection actual = Membership.FindUsersByEmail(TEST_EMAIL);
+
+			//assert
+			Assert.That(actual.Count, Is.AtLeast(2));
+		}
+
+		[Test]
+		public void CanFindUsersByEmailWithRangesSpecified()
+		{
+			//arrange
+			var created = CreateUsers(2);
+
+			//act
+			int totalRecords;
+			MembershipUserCollection actual = Membership.FindUsersByEmail(TEST_EMAIL, 0, 5, out totalRecords);
+
+			//assert
+			Assert.That(actual.Count, Is.AtLeast(2));
+			Assert.That(totalRecords, Is.AtLeast(2));
+		}
+
+		[Test]
+		public void CanFindUsersByEmailWithInvalidRangesSpecified()
+		{
+			//arrange
+			var created = CreateUsers(2);
+
+			//act
+			int totalRecords;
+			MembershipUserCollection actual = Membership.FindUsersByEmail(TEST_EMAIL, 10, 5, out totalRecords);
+
+			//assert
+			Assert.That(actual.Count, Is.AtLeast(0));
+			Assert.That(totalRecords, Is.AtLeast(2));
+		}
+
+
+		[Test]
+		public void CanGetUsernameByEmail()
+		{
+			string email = "usernamebyemail@test.com";
+			var created = CreateUsers(1, email: email);
+
+			//act
+			string actual = Membership.GetUserNameByEmail(created.First().Email);
+
+			//assert
+			Assert.That(actual, Is.EqualTo(created.First().UserName));
+		}
+
+		[Test]
+		public void CanGetPasswordShouldThrowNotSupportedException()
+		{
+			RavenDbMembershipProvider provider = new RavenDbMembershipProvider();
+
+			Assert.Throws<NotSupportedException>(() => provider.GetPassword("nothing", "doesntmatter"));
 		}
 	}
 }
