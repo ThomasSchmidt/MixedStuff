@@ -1,6 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F8C1D52F-990B-448E-BFC5-5B242D35F3AF}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDbDemo.WebSite", "RavenDbDemo.WebSite\RavenDbDemo.WebSite.csproj", "{820DD180-0812-44D9-9D56-8A336026F72B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDdDemo.Model", "RavenDdDemo.Model\RavenDdDemo.Model.csproj", "{955E301D-4C2E-4CA1-989C-10C351B7A645}"
@@ -10,13 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDbDemo.Repository.Tests", "RavenDbDemo.Repository.Tests\RavenDbDemo.Repository.Tests.csproj", "{EDEBE607-45E8-4CE4-9FC8-39B241928BBB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDbDemo.PerfTest", "RavenDbDemo.PerfTest\RavenDbDemo.PerfTest.csproj", "{91BF787C-772F-4706-B9A5-634DB3FC70B0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F8C1D52F-990B-448E-BFC5-5B242D35F3AF}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

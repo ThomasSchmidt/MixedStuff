@@ -24,9 +24,9 @@ namespace RavenDbDemo.Repository
 				IndexCreation.CreateIndexes(typeof(ProductPriceIndex).Assembly, store);
 				return store;
 			}).InSingletonScope();
-			Bind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InRequestScope();
-			Bind<IRepository<Product>>().To<ProductRepository>().InRequestScope();
-			Bind<IRepository<Category>>().To<CategoryRepository>().InRequestScope();
+			Bind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InTransientScope();
+			Bind<IRepository<Product>>().To<ProductRepository>().InTransientScope();
+			Bind<IRepository<Category>>().To<CategoryRepository>().InTransientScope();
 		}
 	}
 }

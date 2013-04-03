@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -9,6 +10,7 @@ using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Embedded;
 using Raven.Client.Indexes;
 using RavenDbDemo.Repository.Indexes;
 using RavenDdDemo.Model;
@@ -17,14 +19,17 @@ namespace RavenDbDemo.PerfTest
 {
 	class Program
 	{
+		private static List<string> _simpleCreatedIds = new List<string>();
+		private static List<string> _complesCreatedIds = new List<string>();
+
 		static void Main(string[] args)
 		{
 			IDocumentStore store = GetStore();
 			Log("PerfTestSimpleStart", ConsoleColor.Blue);
-			PerfTestSimple(store, 10000);
+			PerfTestSimple(store, 100);
 			Log("PerfTestSimpleEnd", ConsoleColor.Blue);
 			Log("PerfTestComplexStart", ConsoleColor.Blue);
-			PerfTestComplex(store, 10000);
+			PerfTestComplex(store, 100);
 			Log("PerfTestComplexEnd", ConsoleColor.Blue);
 			Log("AllDone", ConsoleColor.Red);
 			Console.ReadLine();
@@ -32,11 +37,12 @@ namespace RavenDbDemo.PerfTest
 
 		private static IDocumentStore GetStore()
 		{
-			IDocumentStore store = new DocumentStore { Url = "http://localhost:8080", DefaultDatabase = "RavenDbDemo"};
+			IDocumentStore store = new DocumentStore(){Url = "http://localhost:8080"};
+			//IDocumentStore store = new EmbeddableDocumentStore();
 			store.Initialize();
-			store.JsonRequestFactory.EnableBasicAuthenticationOverUnsecureHttpEvenThoughPasswordsWouldBeSentOverTheWireInClearTextToBeStolenByHackers = true;
-			store.JsonRequestFactory.ConfigureRequest += (sender, args) => ((HttpWebRequest)args.Request).UnsafeAuthenticatedConnectionSharing = true;
-			store.Conventions.IdentityPartsSeparator = "-";
+			//store.JsonRequestFactory.EnableBasicAuthenticationOverUnsecuredHttpEvenThoughPasswordsWouldBeSentOverTheWireInClearTextToBeStolenByHackers = true;
+			//store.JsonRequestFactory.ConfigureRequest += (sender, args) => ((HttpWebRequest)args.Request).UnsafeAuthenticatedConnectionSharing = true;
+			//store.Conventions.IdentityPartsSeparator = "-";
 			IndexCreation.CreateIndexes(typeof(ProductPriceIndex).Assembly, store);
 			IndexCreation.CreateIndexes(typeof(ComplexCategoryIndex).Assembly, store);
 			return store;	
@@ -56,85 +62,55 @@ namespace RavenDbDemo.PerfTest
 			int countDelete = store.OpenSession().Query<Category, CategoryIndex>()
 				.Customize(c => c.WaitForNonStaleResultsAsOfNow())
 				.Count();
-			using (SqlConnection connection = new SqlConnection(@"Persist Security Info=False;User ID=sa;pwd=1437kbhk#;database=Test;server=localhost;"))
-			{
-				connection.Open();
-				using (SqlCommand cmd = new SqlCommand("TRUNCATE TABLE Category", connection))
-				{
-					cmd.ExecuteNonQuery();
-					connection.Close();
-				}
-			}
 
 			Stopwatch w = Stopwatch.StartNew();
-			//Parallel.ForEach(Enumerable.Range(0, numberOfDocs), i =>
-			//{
-			//    using (IDocumentSession session = store.OpenSession())
-			//    {
-			//        session.Store(new Category { Description = "unit-test-description-" + i, Id = "categories-" + i });
-			//        if (i % 1024 == 0)
-			//            session.SaveChanges();
-			//        if (i == numberOfDocs)
-			//            session.SaveChanges();
-			//    }
-			//});
 			using (IDocumentSession session = store.OpenSession())
 			{
 				for (int i = 0; i < numberOfDocs; i++)
 				{
-					session.Store(new Category { Description = "unit-test-description-" + i, Id = "categories-" + i });
+					//session.Store(new Category { Description = "unit-test-description-" + i, Id = "categories-" + i });
+					session.Store(new Category { Description = "unit-test-description-" + i });
 					if (i % 1024 == 0)
 						session.SaveChanges();
 					if (i == numberOfDocs - 1)
 						session.SaveChanges();
 				}
 			}
-
+			
 			long elapsedInsertRaven = w.ElapsedMilliseconds;
 			Log("elapsedInsertRaven: " + elapsedInsertRaven, ConsoleColor.DarkYellow);
 			w.Restart();
-
-			Parallel.ForEach(Enumerable.Range(0, numberOfDocs), i =>
-			{
-				using (SqlConnection connection = new SqlConnection(@"Persist Security Info=False;User ID=sa;pwd=1437kbhk#;database=Test;server=localhost;"))
-				{
-					connection.Open();
-					using (SqlCommand cmd = new SqlCommand("INSERT INTO Category (Id,Description) VALUES (@Id, @Description)", connection))
-					{
-						cmd.Parameters.Add(new SqlParameter("@Id", "categories-" + i));
-						cmd.Parameters.Add(new SqlParameter("@Description", "unit-test-description" + i));
-						cmd.ExecuteNonQuery();
-						connection.Close();
-					}
-				}
-			});
-
-			long elapsedInsertSql = w.ElapsedMilliseconds;
-			Log("elapsedInsertSql: " + elapsedInsertSql, ConsoleColor.DarkGreen);
 
 			//wait for indexes
 			int count = store.OpenSession().Query<Category, CategoryIndex>()
 				.Customize(c => c.WaitForNonStaleResultsAsOfNow())
 				.Count();
 
+			//get ids
+			_simpleCreatedIds = store.OpenSession().Query<Category>().Take(numberOfDocs).Select(c => c.Id).ToList();
+
 			w.Restart();
 
 			using (IDocumentSession session = store.OpenSession())
 			{
-				string id = "categories-1";
-				Category result = session.Query<Category, CategoryIndex>().FirstOrDefault(cat => cat.Id == id);
+				//string id = "categories-1";
+				//Category result = session.Query<Category, CategoryIndex>().FirstOrDefault(cat => cat.Id == id);
+				Category result = session.Load<Category>(_simpleCreatedIds[0]);
+				Debug.Assert(result != null);
 			}
 
 			long elapsedSingleSelectRaven = w.ElapsedMilliseconds;
 			Log("elapsedSingleSelectRaven: " + elapsedSingleSelectRaven, ConsoleColor.DarkYellow);
 			w.Restart();
 
-			Parallel.ForEach(Enumerable.Range(0, numberOfDocs), i =>
+			Parallel.ForEach(Enumerable.Range(0, _simpleCreatedIds.Count), i =>
 			{
 				using (IDocumentSession session = store.OpenSession())
 				{
-					string id = "categories-" + i;
-					Category result = session.Query<Category, CategoryIndex>().FirstOrDefault(cat => cat.Id == id);
+					//string id = "categories-" + i;
+					//Category result = session.Query<Category, CategoryIndex>().FirstOrDefault(cat => cat.Id == id);
+					Category result = session.Load<Category>(_simpleCreatedIds[i]);
+					Debug.Assert(result != null);
 				}
 			});
 
@@ -144,8 +120,7 @@ namespace RavenDbDemo.PerfTest
 
 			using (IDocumentSession session = store.OpenSession())
 			{
-				string id = "categories-1";
-				Category result = session.Load<Category>(id);
+				Category result = session.Load<Category>(_simpleCreatedIds[0]);
 			}
 
 			long elapsedSingleLoadRaven = w.ElapsedMilliseconds;
@@ -156,63 +131,12 @@ namespace RavenDbDemo.PerfTest
 			{
 				using (IDocumentSession session = store.OpenSession())
 				{
-					string id = "categories-" + i;
-					Category result = session.Load<Category>(id);
+					Category result = session.Load<Category>(_simpleCreatedIds[i]);
 				}
 			});
 
 			long elapsedLoadRaven = w.ElapsedMilliseconds;
 			Log("elapsedLoadRaven: " + elapsedLoadRaven, ConsoleColor.DarkYellow);
-			w.Restart();
-
-
-			Parallel.ForEach(Enumerable.Range(0, numberOfDocs), i =>
-			{
-				using (SqlConnection connection = new SqlConnection(@"Persist Security Info=False;User ID=sa;pwd=1437kbhk#;database=Test;server=localhost;"))
-				{
-					connection.Open();
-					using (SqlCommand cmd = new SqlCommand("SELECT Id, Description FROM dbo.Category WHERE Id = @Id", connection))
-					{
-						cmd.Parameters.Add(new SqlParameter("@Id", "categories-" + i));
-						SqlDataReader reader = cmd.ExecuteReader();
-
-						if (reader.Read())
-						{
-							Category cat = new Category
-							{
-								Id = reader.GetString(0),
-								Description = reader.GetString(1)
-							};
-						}
-						connection.Close();
-					}
-				}
-			});
-
-			long elapsedSelectSql = w.ElapsedMilliseconds;
-			Log("elapsedSelectSql: " + elapsedSelectSql, ConsoleColor.DarkGreen);
-			w.Restart();
-
-			using (SqlConnection connection = new SqlConnection(@"Persist Security Info=False;User ID=sa;pwd=1437kbhk#;database=Test;server=localhost;"))
-			{
-				connection.Open();
-				using (SqlCommand cmd = new SqlCommand("SELECT TOP 1 Id, Description FROM dbo.Category", connection))
-				{
-					SqlDataReader reader = cmd.ExecuteReader();
-					while (reader.Read())
-					{
-						Category cat = new Category
-						{
-							Id = reader.GetString(0),
-							Description = reader.GetString(1)
-						};
-					}
-					connection.Close();
-				}
-			}
-
-			long elapsedSingleSql = w.ElapsedMilliseconds;
-			Log("elapsedSingleSql: " + elapsedSingleSql, ConsoleColor.DarkGreen);
 			w.Restart();
 		}
 
@@ -227,25 +151,11 @@ namespace RavenDbDemo.PerfTest
 
 			Stopwatch w = Stopwatch.StartNew();
 
-			//Parallel.ForEach(Enumerable.Range(1, numberOfDocs), i =>
-			//{
-			//    using(IDocumentSession session = store.OpenSession())
-			//    {
-			//        ComplexCategory cat = ComplexCategory.CreateRandom();
-			//        cat.Id = "complexcategories-" + i;
-			//        session.Store(cat);
-			//        if (i % 1024 == 0)
-			//            session.SaveChanges();
-			//        if ( i == numberOfDocs )
-			//            session.SaveChanges();
-			//    }
-			//});
 			using (IDocumentSession session = store.OpenSession())
 			{
 				for (int ix = 0; ix < numberOfDocs; ix++)
 				{
 					ComplexCategory cat = ComplexCategory.CreateRandom();
-					cat.Id = "complexcategories-" + ix;
 					session.Store(cat);
 					if ( ix % 1024 == 0)
 					{
@@ -265,13 +175,16 @@ namespace RavenDbDemo.PerfTest
 				.Customize(c => c.WaitForNonStaleResultsAsOfNow())
 				.Count();
 
+			//get ids
+			_complesCreatedIds = store.OpenSession().Query<ComplexCategory>().Take(numberOfDocs).Select(c => c.Id).ToList();
+
+
 			w.Restart();
-			Parallel.ForEach(Enumerable.Range(1, numberOfDocs), i =>
+			Parallel.ForEach(Enumerable.Range(0, numberOfDocs), i =>
 			{
 				using (IDocumentSession session = store.OpenSession())
 				{
-					string id = "complexcategories-" + i;
-					ComplexCategory result = session.Query<ComplexCategory>().FirstOrDefault(cat => cat.Id == id);
+					ComplexCategory result = session.Load<ComplexCategory>(_complesCreatedIds[i]);
 				}
 			});
 			long elapsedComplexSelectRaven = w.ElapsedMilliseconds;
@@ -280,8 +193,7 @@ namespace RavenDbDemo.PerfTest
 			w.Restart();
 			using (IDocumentSession session = store.OpenSession())
 			{
-				string id = "complexcategories-" + 1;
-				ComplexCategory result = session.Query<ComplexCategory>().FirstOrDefault(cat => cat.Id == id);
+				ComplexCategory result = session.Load<ComplexCategory>(_complesCreatedIds[0]);
 			}
 			long elapsedComplexSelectSingleRaven = w.ElapsedMilliseconds;
 			Log("elapsedComplexSelectSingleRaven: " + elapsedComplexSelectSingleRaven, ConsoleColor.DarkYellow);
@@ -291,8 +203,9 @@ namespace RavenDbDemo.PerfTest
 			{
 				using (IDocumentSession session = store.OpenSession())
 				{
-					string id = "complexcategories-" + i;
-					ComplexCategory result = session.Load<ComplexCategory>(id);
+					//string id = "complexcategories-" + i;
+					//ComplexCategory result = session.Load<ComplexCategory>(id);
+					ComplexCategory result = session.Load<ComplexCategory>(_complesCreatedIds[i - 1]);
 				}
 			});
 			long elapsedComplexLoadRaven = w.ElapsedMilliseconds;
@@ -301,8 +214,9 @@ namespace RavenDbDemo.PerfTest
 			w.Restart();
 			using (IDocumentSession session = store.OpenSession())
 			{
-				string id = "complexcategories-" + 1;
-				ComplexCategory result = session.Load<ComplexCategory>(id);
+				//string id = "complexcategories-" + 1;
+				//ComplexCategory result = session.Load<ComplexCategory>(id);
+				ComplexCategory result = session.Load<ComplexCategory>(_complesCreatedIds[0]);
 			}
 			long elapsedComplexLoadSingleRaven = w.ElapsedMilliseconds;
 			Log("elapsedComplexLoadSingleRaven: " + elapsedComplexSelectSingleRaven, ConsoleColor.DarkYellow);

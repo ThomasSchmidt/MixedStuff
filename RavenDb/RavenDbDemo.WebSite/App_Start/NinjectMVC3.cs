@@ -1,12 +1,14 @@
+using Ninject.Web.Common;
+using System.Reflection;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ninject;
+using Ninject.Web.Mvc;
+
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RavenDbDemo.WebSite.App_Start.NinjectMVC3), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(RavenDbDemo.WebSite.App_Start.NinjectMVC3), "Stop")]
 
 namespace RavenDbDemo.WebSite.App_Start
 {
-	using System.Reflection;
-	using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-	using Ninject;
-	using Ninject.Web.Mvc;
 
 	public static class NinjectMVC3 
 	{
@@ -17,8 +19,8 @@ namespace RavenDbDemo.WebSite.App_Start
 		/// </summary>
 		public static void Start() 
 		{
-			DynamicModuleUtility.RegisterModule(typeof(OnePerRequestModule));
-			DynamicModuleUtility.RegisterModule(typeof(HttpApplicationInitializationModule));
+			DynamicModuleUtility.RegisterModule(typeof(Ninject.Web.Common.OnePerRequestHttpModule));
+			DynamicModuleUtility.RegisterModule(typeof(Ninject.Web.Common.HttpApplicationInitializationHttpModule));
 			bootstrapper.Initialize(CreateKernel);
 		}
 		
