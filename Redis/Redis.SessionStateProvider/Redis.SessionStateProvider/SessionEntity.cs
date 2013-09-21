@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace Redis.SessionStateProvider
 {
+	[Serializable]
 	public class SessionEntity
 	{
+		public SessionEntity()
+		{
+			SessionItems = new Dictionary<string, object>();
+		}
+
 		public DateTime Created { get; set; }
 		public DateTime Expires { get; set; }
 		public int Flags { get; set; }

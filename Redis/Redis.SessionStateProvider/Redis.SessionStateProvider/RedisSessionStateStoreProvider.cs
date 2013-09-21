@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.SessionState;
-using ServiceStack.Redis;
+using BookSleeve;
+
 
 namespace Redis.SessionStateProvider
 {
@@ -14,7 +17,6 @@ namespace Redis.SessionStateProvider
 	/// </summary>
 	public class RedisSessionStateStoreProvider : SessionStateStoreProviderBase
 	{
-		private IRedisClient _redisClient;
 		private static HttpStaticObjectsCollection _staticObjects = new HttpStaticObjectsCollection();
 		private static object _lock = new object();
 
@@ -34,8 +36,6 @@ namespace Redis.SessionStateProvider
 		#region SessionStateStoreProviderBase 
 		public override void Dispose()
 		{
-			if ( _redisClient != null )
-				_redisClient.Dispose();
 		}
 
 		public override bool SetItemExpireCallback(SessionStateItemExpireCallback expireCallback)
@@ -45,34 +45,45 @@ namespace Redis.SessionStateProvider
 
 		public override void InitializeRequest(HttpContext context)
 		{
-			_redisClient = new RedisClient("localhost");
+			
 		}
 
+		/// <summary>
+		/// Called when SessionState = ReadOnly
+		/// </summary>
 		public override SessionStateStoreData GetItem(HttpContext context, string id, out bool locked, out TimeSpan lockAge, out object lockId, out SessionStateActions actions)
 		{
-			actions = SessionStateActions.None;
-
-			SessionEntity sessionEntity = _redisClient.Get<SessionEntity>(id);
-			if (sessionEntity == null || sessionEntity.SessionItems == null )
+			RedisConnection redisConnection = ConnectionUtils.Connect("10.0.0.3:6379");
 			{
+				redisConnection.Open();
+
+				var result = redisConnection.Strings.Get(0, id);
+				byte[] raw = redisConnection.Wait(result);
+			
+				actions = SessionStateActions.None;
+
+				SessionEntity sessionEntity = GetFromBytes(raw);
+				if (sessionEntity == null || sessionEntity.SessionItems == null )
+				{
+					locked = false;
+					lockId = _lock;
+					lockAge = TimeSpan.MinValue;
+					return null;
+				}
+
+				ISessionStateItemCollection sessionItems = new SessionStateItemCollection();
+				foreach (string key in sessionEntity.SessionItems.Keys)
+				{
+					sessionItems[key] = sessionEntity.SessionItems[key];
+				}
+
+				SessionStateStoreData data = new SessionStateStoreData(sessionItems, _staticObjects, context.Session.Timeout);
+
 				locked = false;
 				lockId = _lock;
 				lockAge = TimeSpan.MinValue;
-				return null;
+				return data;
 			}
-
-			ISessionStateItemCollection sessionItems = new SessionStateItemCollection();
-			foreach (string key in sessionEntity.SessionItems.Keys)
-			{
-				sessionItems[key] = sessionEntity.SessionItems[key];
-			}
-
-			SessionStateStoreData data = new SessionStateStoreData(sessionItems, _staticObjects, context.Session.Timeout);
-
-			locked = false;
-			lockId = _lock;
-			lockAge = TimeSpan.MinValue;
-			return data;
 		}
 
 		/// <summary>
@@ -102,9 +113,15 @@ namespace Redis.SessionStateProvider
 		/// </summary>
 		public override SessionStateStoreData GetItemExclusive(HttpContext context, string id, out bool locked, out TimeSpan lockAge, out object lockId, out SessionStateActions actions)
 		{
+			RedisConnection redisConnection = ConnectionUtils.Connect("10.0.0.3:6379");
+
+			var result = redisConnection.Strings.Get(0, id);
+			byte[] raw = redisConnection.Wait(result);
+
 			actions = SessionStateActions.None;
 
-			SessionEntity sessionEntity = _redisClient.Get<SessionEntity>(id);
+			SessionEntity sessionEntity = GetFromBytes(raw);
+
 			if (sessionEntity == null || sessionEntity.SessionItems == null)
 			{
 				locked = false;
@@ -134,20 +151,28 @@ namespace Redis.SessionStateProvider
 
 		public override void SetAndReleaseItemExclusive(HttpContext context, string id, SessionStateStoreData item, object lockId, bool newItem)
 		{
-			SessionEntity sessionEntity = _redisClient.Get<SessionEntity>(id);
-
-			foreach (var key in item.Items.Keys)
+			StringWriter sw = new StringWriter();
+			
+			RedisConnection redisConnection = ConnectionUtils.Connect("10.0.0.3:6379", sw);
 			{
-				if (!sessionEntity.SessionItems.ContainsKey(key.ToString()))
+				var result = redisConnection.Strings.Get(0, id);
+				byte[] raw = redisConnection.Wait(result);
+				SessionEntity sessionEntity = GetFromBytes(raw) ?? new SessionEntity();
+
+				foreach (var key in item.Items.Keys)
 				{
-					sessionEntity.SessionItems.Add(key.ToString(), item.Items[key.ToString()]);
+					if (!sessionEntity.SessionItems.ContainsKey(key.ToString()))
+					{
+						sessionEntity.SessionItems.Add(key.ToString(), item.Items[key.ToString()]);
+					}
+					else
+					{
+						sessionEntity.SessionItems[key.ToString()] = item.Items[key.ToString()];
+					}
 				}
-				else
-				{
-					sessionEntity.SessionItems[key.ToString()] = item.Items[key.ToString()];
-				}
+
+				redisConnection.Strings.Set(0, id, ToBytes(sessionEntity));
 			}
-			_redisClient.Add(id, sessionEntity);
 		}
 
 		public override void RemoveItem(HttpContext context, string id, object lockId, SessionStateStoreData item)
@@ -177,7 +202,7 @@ namespace Redis.SessionStateProvider
 
 		public override void EndRequest(HttpContext context)
 		{
-			_redisClient.Dispose();
+			
 		}
 		#endregion
 
@@ -186,6 +211,30 @@ namespace Redis.SessionStateProvider
 			ISessionStateItemCollection sessionItems = new SessionStateItemCollection();
 			SessionStateStoreData data = new SessionStateStoreData(sessionItems, _staticObjects, timeout);
 			return data;
+		}
+
+		private SessionEntity GetFromBytes(byte[] raw)
+		{
+			if (raw == null || raw.Length == 0)
+				return null;
+
+			using (MemoryStream ms = new MemoryStream(raw))
+			{
+				BinaryFormatter binaryFormatter = new BinaryFormatter();
+				SessionEntity sessionEntity = binaryFormatter.Deserialize(ms) as SessionEntity;
+				ms.Close();
+				return sessionEntity;
+			}
+		}
+
+		private byte[] ToBytes(SessionEntity sessionEntity)
+		{
+			using (MemoryStream ms = new MemoryStream())
+			{
+				BinaryFormatter binaryFormatter = new BinaryFormatter();
+				binaryFormatter.Serialize(ms, sessionEntity);
+				return ms.ToArray();
+			}
 		}
 	}
 }

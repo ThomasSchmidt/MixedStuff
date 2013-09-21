@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Redis.SessionStateProvider.Tests
 {
-    public class Class1
+    public class RedisSessionStateStoreProviderTests
     {
     }
 }
